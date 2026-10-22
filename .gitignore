@@ -1,0 +1,29 @@
+# ไลบรารีที่ติดตั้งจากอินเทอร์เน็ต (ไม่ต้องเก็บไว้ใน Git)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ไฟล์ตั้งค่าและกุญแจลับ (ห้ามเผยแพร่)
+.env
+.env.*
+*.pem
+*.key
+secrets/
+credentials/
+
+# ไฟล์ชั่วคราวของระบบ
+x.id
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# โฟลเดอร์เก็บข้อมูลชั่วคราวของระบบทดสอบ
+tmp/
+temp/
+coverage/
+.nyc_output/
+
+# โฟลเดอร์ย่อยที่เก็บคลัง Git ซ้อนกัน (ไม่ต้องอัปโหลด)
+opdc-chatbot/

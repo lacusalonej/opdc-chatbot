@@ -1,0 +1,14 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# ไฟล์ภาษาไทยและ JSON ต้องเป็น UTF-8
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+
+# ไฟล์ที่ไม่ควรถูกแก้ไข
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary

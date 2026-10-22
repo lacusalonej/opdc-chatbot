@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "name": "ก.พ.ร. (OPDC) Knowledge Base",
+    "description": "ฐานความรู้สำหรับ Chatbot ของสำนิกงานคณะกรรมการพัฒนาระบบราชการ",
+    "source": "https://www.opdc.go.th/",
+    "last_updated": "2026-10-09"
+  },
+  "organization": {
+    "name_th": "สำนิกงานคณะกรรมการพัฒนาระบบราชการ (สำนักงานคณะกรรมการพัฒนาระบบราชการ)",
+    "name_en": "Office of the Public Sector Development Commission",
+    "abbr_th": "ก.พ.ร.",
+    "abbr_en": "OPDC",
+    "address": "59/1 ถนนพิษณุโลก แขวงดุสิต เขตดุสิต กรุงเทพฯ 10300",
+    "phone": "02 356 9999",
+    "fax": "02 356 9910",
+    "email": "contact@opdc.go.th",
+    "facebook": "https://www.facebook.com/OPDCThailand",
+    "youtube": "https://www.youtube.com/@OPDCThailand"
+  },
+  "vision": {
+    "text_th": "พัฒนาระบบราชการตามหลักธรรมาภิบาลให้เกิดผลอย่างเป็นรูปธรรม",
+    "text_en": "Develop public administration according to good governance principles to achieve tangible results"
+  },
+  "mission": {
+    "text_th": "สำนิกงาน ก.พ.ร. รับผิดชอบงานธุรการและวิชาการของ ก.พ.ร. และ กพม. ศึกษา/วิเคราะห์/เสนอแนะนโยบาย และให้คำปรึกษาการพัฒนาการพัฒนาระบบราชการแก่คณะรัฐมนตรี ส่วนราชการ และหน่วยงานรัฐอื่น ๆ",
+    "text_en": "Support the administrative and academic work of PDC and PODPC; study, analyze, advise on policies; provide consulting on public administration development to the Cabinet, government agencies, and other state organizations"
+  },
+  "strategic_issues": [
+    {
+      "id": "1",
+      "title_th": "นวัตกรรมบริการประชาชนโดยยึดประชาชนเป็นศูนย์กลาง",
+      "desc_th": "ยกระดับประสิทธิภาพบริการสาธารณะ พัฒนานวัตกรรม เข้าถึงง่าย สะดวก ต้นทุนน้อย"
+    },
+    {
+      "id": "2",
+      "title_th": "โครงสร้างและระบบบริหารจัดการภาครัฐ",
+      "desc_th": "ปรับบทบาท ภารกิจ โครงสร้าง ให้เหมาะสม ยืดหยุ่น ใช้ดิจิทัลเทคโนโลยีช่วยปฏิบัติงาน"
+    },
+    {
+      "id": "3",
+      "title_th": "รัฐเปิดกว้าง เชื่อมโยงบูรณาการ มีส่วนร่วม",
+      "desc_th": "บูรณาการส่วนกลาง-ภูมิภาค-ท้องถิ่น แบบยึดพื้นที่ ร่วมทุกภาคส่วน โปร่งใสตรวจสอบได้"
+    },
+    {
+      "id": "4",
+      "title_th": "ส่งเสริมธรรมาภิบาลในภาครัฐ",
+      "desc_th": "สร้างความซื่อสัตย์ โปร่งใส ลดดุลยพินิจเจ้าหน้าที่"
+    },
+    {
+      "id": "5",
+      "title_th": "พัฒนาศักยภาพ ก.พ.ร. เป็นองค์กรสมรรถนะสูง ดิจิทัลเต็มรูปแบบ",
+      "desc_th": "ปรับกระบวนการภายใน พัฒนาระบบดิจิทัลและบุคลากร"
+    }
+  ],
+  "committees": [
+    {
+      "name_th": "คณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.)",
+      "name_en": "Public Sector Development Commission (PDC)",
+      "role_th": "กำหนดนโยบายและกำกับดูแลการพัฒนาระบบราชการ"
+    },
+    {
+      "name_th": "คณะกรรมการตรวจสอบและประเมินผล (ค.ต.ป.)",
+      "name_en": "Audit and Evaluation Committee (PAEC)",
+      "role_th": "ตรวจสอบและประเมินผลการดำเนินงาน"
+    },
+    {
+      "name_th": "คณะกรรมการพัฒนาและส่งเสริม (กพม.)",
+      "name_en": "Development and Promotion Committee (PODPC)",
+      "role_th": "พัฒนาและส่งเสริมการพัฒนาการพัฒนาระบบราชการ"
+    },
+    {
+      "name_th": "อนุกรรมการ (อ.ก.พ.ร.)",
+      "name_en": "Sub-committee (Sub-PDC)",
+      "role_th": "คณะกรรมการระดับอนุฯ"
+    },
+    {
+      "name_th": "อนุกรรมการ (อ.กพม.)",
+      "name_en": "Sub-committee (Sub-PODPC)",
+      "role_th": "คณะกรรมการระดับอนุฯ"
+    }
+  ],
+  "knowledge_center": {
+    "description_th": "ศูนย์ความรู้ ให้ความรู้กฎหมาย คำวินิจฉัย เอกสารต่าง ๆ และผลการปฏิบัติงาน",
+    "sections": [
+      "กฎหมาย/คำวินิจฉัย",
+      "เอกสารเผยแพร่",
+      "ผลการปฏิบัติราชการ",
+      "FAQ คำถามที่พบบ่อย",
+      "ข่าวประชาสัมพันธ์",
+      "ปฏิทินกิจกรรม"
+    ]
+  },
+  "quick_links": [
+    "Open Government Partnership (OGP)",
+    "ศูนย์ข้อมูลองค์กรมหาชน (PO Portal)",
+    "ระบบ PAS",
+    "e-SAR",
+    "OPDC Data Portal",
+    "รางวัลเลิศรัฐ (PSEA)",
+    "ศูนย์ข้อมูลข่าวสารของรัฐ (Infocenter)",
+    "ศูนย์ปฏิบัติการต่อต้านการทุจริต (ACOC)",
+    "PMQA Channel",
+    "B-READY",
+    "ระบบฐานข้อมูล AI ภาครัฐ",
+    "info.go.th",
+    "workD",
+    "ศูนย์ร้องเรียน ป.ป.ช. และ ป.ป.ท."
+  ],
+  "services": [
+    {
+      "name_th": "บริการให้คำปรึกษาระบบราชการ",
+      "desc_th": "ให้คำปรึกษาและข้อเสนอแนะแก่ส่วนราชการเกี่ยวกับการพัฒนาระบบราชการตามยุทธศาสตร์ 5 ประการ"
+    },
+    {
+      "name_th": "ประเมินผลและตรวจสอบ (ค.ต.ป.)",
+      "desc_th": "การตรวจสอบและประเมินผลการปฏิบัติตามภารกิจของหน่วยงานราชการ"
+    },
+    {
+      "name_th": "รางวัลเลิศรัฐ (PSEA)",
+      "desc_th": "การมอบรางวัลเพื่อเชิดชูหน่วยงานที่ทำผลงานดีเด่นด้านการพัฒนาระบบราชการ"
+    },
+    {
+      "name_th": "B-READY (ธนาคารโลก)",
+      "desc_th": "การประเมินความพร้อมของประเทศไทยเพื่อการลงทุนและการค้าระหว่างประเทศ"
+    }
+  ],
+  "events": [
+    {
+      "name_th": "My Better Country Hackathon ครั้งที่ 15",
+      "date_th": "1 พฤศจิกายน 2569",
+      "desc_th": "เวทีพัฒนานวัตกรรมเพื่อประเทศที่ดีขึ้น"
+    }
+  ],
+  "channels": {
+    "contact_th": "ช่องทางการติดต่อ",
+    "electronic_th": "อิเล็กทรอนิกส์",
+    "complaint_corruption_th": "ร้องเรียนทุจริต",
+    "complaint_service_th": "ร้องเรียนการปฏิบัติงาน"
+  }
+}
