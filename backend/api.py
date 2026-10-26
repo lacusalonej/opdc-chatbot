@@ -14,7 +14,7 @@ from rag_engine import RAGEngine
 
 app = FastAPI(
     title="OPDC Chatbot API",
-    description="API สำหรับ Chatbot ของสำนิกงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.)",
+    description="API สำหรับ Chatbot ของสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.)",
     version="1.0.0",
 )
 

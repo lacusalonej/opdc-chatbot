@@ -1,12 +1,12 @@
 {
   "meta": {
     "name": "ก.พ.ร. (OPDC) Knowledge Base",
-    "description": "ฐานความรู้สำหรับ Chatbot ของสำนิกงานคณะกรรมการพัฒนาระบบราชการ",
+    "description": "ฐานความรู้สำหรับ Chatbot ของสำนักงานคณะกรรมการพัฒนาระบบราชการ",
     "source": "https://www.opdc.go.th/",
     "last_updated": "2026-10-09"
   },
   "organization": {
-    "name_th": "สำนิกงานคณะกรรมการพัฒนาระบบราชการ (สำนักงานคณะกรรมการพัฒนาระบบราชการ)",
+    "name_th": "สำนักงานคณะกรรมการพัฒนาระบบราชการ (สำนักงานคณะกรรมการพัฒนาระบบราชการ)",
     "name_en": "Office of the Public Sector Development Commission",
     "abbr_th": "ก.พ.ร.",
     "abbr_en": "OPDC",
@@ -22,7 +22,7 @@
     "text_en": "Develop public administration according to good governance principles to achieve tangible results"
   },
   "mission": {
-    "text_th": "สำนิกงาน ก.พ.ร. รับผิดชอบงานธุรการและวิชาการของ ก.พ.ร. และ กพม. ศึกษา/วิเคราะห์/เสนอแนะนโยบาย และให้คำปรึกษาการพัฒนาการพัฒนาระบบราชการแก่คณะรัฐมนตรี ส่วนราชการ และหน่วยงานรัฐอื่น ๆ",
+    "text_th": "สำนักงาน ก.พ.ร. รับผิดชอบงานธุรการและวิชาการของ ก.พ.ร. และ กพม. ศึกษา/วิเคราะห์/เสนอแนะนโยบาย และให้คำปรึกษาการพัฒนาการพัฒนาระบบราชการแก่คณะรัฐมนตรี ส่วนราชการ และหน่วยงานรัฐอื่น ๆ",
     "text_en": "Support the administrative and academic work of PDC and PODPC; study, analyze, advise on policies; provide consulting on public administration development to the Cabinet, government agencies, and other state organizations"
   },
   "strategic_issues": [
