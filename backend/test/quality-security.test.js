@@ -275,7 +275,7 @@ async function raw(path, opts) {
 
     await (async () => {
         const r = await chat('ทดสอบ'.repeat(5000));
-        check('D4', 'D4 ข้อความขนาดใกล้เพดาน (50k) -> ตอบได้หรือ 413 (ไม่ 500)', () => {
+        check('D4', 'D4 ข้อความขนาดใกล้เพดาน (25k) -> ตอบได้หรือ 413 (ไม่ 500)', () => {
             assert(r.status === 200 || r.status === 413 || r.status === 400, `status=${r.status}`);
             return `status=${r.status}`;
         });

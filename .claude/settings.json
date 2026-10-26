@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/auto-commit-push.js",
+            "command": "node \"D:/notebooklm-automation/opdc-chatbot/.claude/hooks/auto-commit-push.js\"",
             "timeout": 120
           }
         ]
