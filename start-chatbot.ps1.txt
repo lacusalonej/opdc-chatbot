@@ -1,0 +1,60 @@
+# start-chatbot.ps1
+$ErrorActionPreference = "Stop"
+
+Write-Host ""
+Write-Host "========================================"
+Write-Host "  🤖 OPDC Chatbot - เริ่มต้นอัตโนมัติ"
+Write-Host "========================================"
+Write-Host ""
+
+$basePath = "D:\notebooklm-automation\opdc-chatbot"
+if (-not (Test-Path "$basePath\backend\server.js")) {
+    Write-Host "❌ ไม่เจอ backend\server.js"
+    Write-Host "กรุณาวางไฟล์ไว้ที่: $basePath"
+    Read-Host "กด Enter เพื่อออก"
+    exit 1
+}
+
+Write-Host "🔍 ตรวจสอบพอร์ต 8001..."
+$portProcess = netstat -ano | Select-String ":8001"
+if ($portProcess) {
+    $pid = ($portProcess -split '\s+')[-1]
+    Write-Host "⚠️ พบโปรเซสเก่าบนพอร์ต 8001 (PID: $pid) -> กำลังปิด..."
+    taskkill /PID $pid /F *>$null
+}
+
+Write-Host "🚀 เริ่มเซิร์ฟเวอร์..."
+$serverProcess = Start-Process -FilePath "node" -ArgumentList "server.js" -WorkingDirectory "$basePath\backend" -WindowStyle Normal -PassThru
+Write-Host "   เซิร์ฟเวอร์รันในหน้าต่างแยก (PID: $($serverProcess.Id))"
+
+Write-Host "⏳ รอเซิร์ฟเวอร์พร้อม..."
+$ready = $false
+for ($i = 0; $i -lt 30; $i++) {
+    Start-Sleep -Seconds 1
+    try {
+        $r = Invoke-RestMethod -Uri "http://localhost:8001/health" -Method Get -TimeoutSec 2
+        $ready = $true
+        break
+    } catch { }
+}
+if (-not $ready) {
+    Write-Host "❌ เซิร์ฟเวอร์เริ่มไม่สำเร็จ (timeout 30 วินาที)"
+    Write-Host "💡 ลองดูหน้าต่างเซิร์ฟเวอร์ ว่ามี Error ไหม"
+    Read-Host "กด Enter เพื่อออก"
+    exit 1
+}
+
+Write-Host "✅ เซิร์ฟเวอร์พร้อมแล้ว!"
+Write-Host "🌐 เปิดเบราว์เซอร์..."
+Start-Process "http://localhost:8001"
+
+Write-Host ""
+Write-Host "========================================"
+Write-Host "  ✅ พร้อมใช้งานแล้ว!"
+Write-Host "========================================"
+Write-Host ""
+Write-Host "💡 หน้าแชทเปิดในเบราว์เซอร์อัตโนมัติ (http://localhost:8001)"
+Write-Host "💡 เซิร์ฟเวอร์ทำงานต่อในหน้าต่างแยก"
+Write-Host "💡 ต้องการหยุด: ปิดหน้าต่าง 'node server.js' หรือกด Ctrl+C ที่นั่น"
+Write-Host ""
+Read-Host "กด Enter เพื่อปิดหน้าต่างนี้ (เซิร์ฟเวอร์ยังทำงานต่อ)..."

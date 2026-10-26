@@ -13,6 +13,7 @@
  */
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const RAGEngine = require('./rag');
 const { processWithoutLLM } = require('./promptEngine');
 const { getValidIntents } = require('./intentClassifier');
@@ -27,12 +28,23 @@ app.use(cors({
         'https://opdc.go.th',
         'http://localhost:8000',
         'http://localhost:8001',
-        'http://127.0.0.1:8000'
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'http://127.0.0.1:8000',
+        'http://127.0.0.1:8001'
     ],
     methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type']
 }));
 app.use(express.json());
+
+// เสิร์ฟ static files (หน้าแชท) จากโฟลเดอร์ parent
+app.use(express.static(path.join(__dirname, '..')));
+
+// Root route -> เสิร์ฟหน้าแชท
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'chat-test.html'));
+});
 
 // ตั้งค่า RAG engine
 const engine = new RAGEngine();
