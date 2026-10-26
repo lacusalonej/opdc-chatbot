@@ -34,9 +34,9 @@ class RAGEngine {
             id: 'org_name',
             category: 'general',
             keywords: ['กพร', 'ก.พ.ร.', 'opdc', 'คืออะไร', 'ชื่อเต็ม', 'สังกัด', 'บทบาท', 'ประวัติ'],
-            title: 'ข้อมูลองค์ราศตร์ ก.พ.ร.',
+            title: 'ข้อมูลองค์กร ก.พ.ร.',
             sourceUrl: baseUrl,
-            publisher: 'สำนิกงานคณะกรรมการพัฒนาระบบราชการ',
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
             content: `${org.name_th} (${org.name_en}) ชื่อย่อคือ ${org.abbr_th} หรือ ${org.abbr_en} มีหน้าที่พัฒนาและยกระดับระบบราชการไทยตามหลักธรรมาภิบาล ให้คำปรึกษาและข้อเสนอแนะนโยบายแก่คณะรัฐมนตรีและหน่วยงานภาครัฐ`
         });
@@ -47,7 +47,7 @@ class RAGEngine {
             keywords: ['ติดต่อ', 'เบอร์', 'โทร', 'โทรสาร', 'fax', 'email', 'อีเมล', 'ที่อยู่', 'facebook', 'youtube', 'สถานที่', 'แผนที่', 'อยู่ที่ไหน'],
             title: 'ข้อมูลการติดต่อ ก.พ.ร.',
             sourceUrl: `${baseUrl}/contact`,
-            publisher: 'สำนิกงานคณะกรรมการพัฒนาระบบราชการ',
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
             content: `ช่องทางการติดต่อ ก.พ.ร. (OPDC):\n- ที่อยู่: ${org.address}\n- เบอร์โทรศัพท์: ${org.phone}\n- โทรสาร (Fax): ${org.fax}\n- อีเมล: ${org.email}\n- Facebook: ${org.facebook}\n- YouTube: ${org.youtube}`
         });
@@ -58,7 +58,7 @@ class RAGEngine {
             keywords: ['วิสัยทัศน์', 'vision', 'เป้าหมาย'],
             title: 'วิสัยทัศน์ ก.พ.ร.',
             sourceUrl: `${baseUrl}/about/vision/`,
-            publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
             content: `วิสัยทัศน์ ก.พ.ร.: "${this.data.vision.text_th}"`
         });
@@ -66,12 +66,12 @@ class RAGEngine {
         chunks.push({
             id: 'mission',
             category: 'general',
-            keywords: ['พันฐกิจ', 'mission', 'หน้าที่'],
-            title: 'พันฐกิจ ก.พ.ร.',
+            keywords: ['ภารกิจ', 'mission', 'หน้าที่'],
+            title: 'ภารกิจ ก.พ.ร.',
             sourceUrl: `${baseUrl}/about/vision/`,
-            publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
-            content: `พันฐกิจ ก.พ.ร.: ${this.data.mission.text_th}`
+            content: `ภารกิจ ก.พ.ร.: ${this.data.mission.text_th}`
         });
 
         for (const issue of this.data.strategic_issues) {
@@ -81,7 +81,7 @@ class RAGEngine {
                 keywords: ['ยุทธศาสตร์', 'เป้าหมาย', 'กลยุทธ์', issue.title_th],
                 title: `ประเด็นยุทธศาสตร์ที่ ${issue.id}`,
                 sourceUrl: `${baseUrl}/about/opdc-action-plan/`,
-                publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+                publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
                 documentStatus: 'published',
                 content: `ประเด็นยุทธศาสตร์ที่ ${issue.id}: ${issue.title_th} - ${issue.desc_th}`
             });
@@ -94,7 +94,7 @@ class RAGEngine {
                 keywords: ['คณะกรรมการ', 'กรรมการ', comm.name_th],
                 title: comm.name_th,
                 sourceUrl: `${baseUrl}/about/board/`,
-                publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+                publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
                 documentStatus: 'published',
                 content: `${comm.name_th} (${comm.name_en}): ${comm.role_th}`
             });
@@ -107,7 +107,7 @@ class RAGEngine {
                 keywords: ['บริการ', 'ขั้นตอน', 'ขอ', 'รางวัล', service.name_th],
                 title: service.name_th,
                 sourceUrl: baseUrl,
-                publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+                publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
                 documentStatus: 'published',
                 content: `${service.name_th}: ${service.desc_th}`
             });
@@ -119,7 +119,7 @@ class RAGEngine {
             keywords: ['ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ระเบียบ', 'กฎหมาย', 'คำวินิจฉัย', 'รายงาน'],
             title: 'ศูนย์ความรู้ ก.พ.ร.',
             sourceUrl: baseUrl,
-            publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
             content: `ศูนย์ความรู้ ก.พ.ร. ให้บริการ:\n- กฎหมายและคำวินิจฉัย\n- เอกสารเผยแพร่และรายงานผลการปฏิบัติราชการ\n- ข้อมูล B-READY, PMQA, OGP\nสามารถสืบค้นได้ที่เว็บไซต์หลัก https://www.opdc.go.th/`
         });
@@ -130,9 +130,9 @@ class RAGEngine {
             keywords: ['สวัสดี', 'หวัดดี', 'hello', 'hi', 'ทักทาย', 'สบายดีไหม'],
             title: 'การทักทาย',
             sourceUrl: baseUrl,
-            publisher: 'สำนิกงานคณะกรรมการพัฒนาระบสารราชการ',
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
-            content: `สวัสดีครับ! ผมคือ Chatbot ผู้ช่วยของสำนิกงาน ก.พ.ร. (OPDC) ยินดีให้บริการข้อมูลทั่วไป การติดต่อ การบริการ และการสืบค้นเอกสารครับ ถามมาได้เลยครับ`
+            content: `สวัสดีครับ! ผมคือ Chatbot ผู้ช่วยของสำนักงาน ก.พ.ร. (OPDC) ยินดีให้บริการข้อมูลทั่วไป การติดต่อ การบริการ และการสืบค้นเอกสารครับ ถามมาได้เลยครับ`
         });
 
         // แปลง text → content สำหร้บ compatibility กับโค้ดเดิม
@@ -167,7 +167,7 @@ class RAGEngine {
             chat: ['สวัสดี', 'หวัดดี', 'hello', 'hi', 'ขอบคุณ', 'บาย', 'ลาก่อน'],
             service: ['บริการ', 'ขั้นตอน', 'วิธี', 'ขอ', 'สมัคร', 'รางวัล', 'psea', 'ประเมิน'],
             search: ['ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ไฟล์', 'รายงาน', 'newsletter', 'b-ready'],
-            general: ['คืออะไร', 'กพร', 'ก.พ.ร.', 'opdc', 'วิสัยทัศน์', 'พันฐกิจ', 'ยุทธศาสตร์', 'คณะกรรมการ', 'โครงสร้าง', 'ประวัติ']
+            general: ['คืออะไร', 'กพร', 'ก.พ.ร.', 'opdc', 'วิสัยทัศน์', 'ภารกิจ', 'ยุทธศาสตร์', 'คณะกรรมการ', 'โครงสร้าง', 'ประวัติ']
         };
 
         for (const [intent, kws] of Object.entries(keywords)) {

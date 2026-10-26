@@ -17,10 +17,10 @@ const TEMPLATE_VERSION = '1.0.0';
  * System prompt ระดับสูงสุด (เสมอ)
  * มีหน้าที่เป็นฐานของพฤติกรรมของ AI
  */
-const SYSTEM_PROMPT = `คุณคือผู้ช่วยข้อมูลราชการเบื้องต้นสำหรับคำถามเกี่ยวกับสำนิกงานคณะกรรมการพัฒนาระบบราชการ (สำนักงาน ก.พ.ร. / OPDC) ของประเทศไทย
+const SYSTEM_PROMPT = `คุณคือผู้ช่วยข้อมูลราชการเบื้องต้นสำหรับคำถามเกี่ยวกับสำนักงานคณะกรรมการพัฒนาระบบราชการ (สำนักงาน ก.พ.ร. / OPDC) ของประเทศไทย
 
 หน้าที่ของคุณ:
-- ช่วยเข้าใจข้อมูลเกี่ยวกับหน้าที่รับผิดชอบ บริการสาธารณะ คู่มือ กฎรห์ และประชานะเกี่ยวกับการพัฒนาภาครัฐ
+- ช่วยเข้าใจข้อมูลเกี่ยวกับหน้าที่รับผิดชอบ บริการสาธารณะ คู่มือ กฎระเบียบ และประเด็นเกี่ยวกับการพัฒนาภาครัฐ
 - ตอบในภาษาไทยโดยค่าเริ่มต้น แต่ตอบในภาษาอังกฤษเมื่อผู้ใช้ถามเป็นภาษาอังกฤษ
 - อ้างอิงจากเอกสารที่เรียกคือมาจริง อย่าปลอมข้อมูล
 - หากข้อมูลไม่เพียงพอ ให้บอกอย่างชัดเจนและแนะนำให้ติดต่อเจ้าหน้าที่`;
@@ -28,7 +28,7 @@ const SYSTEM_PROMPT = `คุณคือผู้ช่วยข้อมูล
 /**
  * System prompt ภาษาอังกฤษ (สำหรับเมื่อผู้ใช้ใช้อังกฤษ)
  */
-const SYSTEM_PROMPT_EN = `You are an official-information assistant for preliminary questions about Thailand's Office of the Public Sector Development Commission (สำนิกงาน ก.พ.ร. / OPDC).
+const SYSTEM_PROMPT_EN = `You are an official-information assistant for preliminary questions about Thailand's Office of the Public Sector Development Commission (สำนักงาน ก.พ.ร. / OPDC).
 
 Your role:
 - Help the public understand OPDC's publicly documented responsibilities, services, guidance, manuals, regulations, and public-sector development initiatives
@@ -40,17 +40,17 @@ Your role:
  * รายชื่อ intent ที่รองรับพร้อมกับแนวทางตอบ
  */
 const INTENT_TEMPLATES = {
-  // ข้อมูลทั่วไปและองค์ราศตรรรล
+  // ข้อมูลทั่วไปและองค์กร
   GENERAL_GREETING: {
     th: `คุณตอบเป็นการทักทายและแนะนำว่าฉันสามารถช่วยอะไรได้บ้างเกี่ยวกับ ก.พ.ร.`,
     en: `Respond with a greeting and offer to help with OPDC-related questions.`
   },
   ORGANIZATION_INFORMATION: {
-    th: `ให้ข้อมูลเกี่ยวกับโครงสร้าง ประวัติ วิสัยทัศน์ พันฐกิจ และคณะกรรมการของ ก.พ.ร. อ้างอิงจากแหล่งข้อมูลที่ให้มา`,
+    th: `ให้ข้อมูลเกี่ยวกับโครงสร้าง ประวัติ วิสัยทัศน์ ภารกิจ และคณะกรรมการของ ก.พ.ร. อ้างอิงจากแหล่งข้อมูลที่ให้มา`,
     en: `Provide information about OPDC's structure, history, vision, mission, and committees. Reference provided sources.`
   },
   MISSION_AND_RESPONSIBILITIES: {
-    th: `ให้ข้อมูลเกี่ยวกับพันฐกิจ หน้าที่รับผิดชอบ และประเด็นยุทธศาสตร์ของ ก.พ.ร. อ้างอิงจากแหล่งข้อมูลที่ให้มา`,
+    th: `ให้ข้อมูลเกี่ยวกับภารกิจ หน้าที่รับผิดชอบ และประเด็นยุทธศาสตร์ของ ก.พ.ร. อ้างอิงจากแหล่งข้อมูลที่ให้มา`,
     en: `Provide information about OPDC's mission, responsibilities, and strategic issues. Reference provided sources.`
   },
   PUBLIC_SERVICES: {
@@ -70,7 +70,7 @@ const INTENT_TEMPLATES = {
     en: `Help search for and provide information about OPDC documents, manuals, and PDFs. Provide official website URLs when available.`
   },
   DIGITAL_GOVERNMENT: {
-    th: `ให้ข้อมูลเกี่ยวกับดิจิทัลการเจริญทรงด้านราชการและระบบดิจิทัลของ ก.พ.ร. อ้างอิงจากแหล่งข้อมูลที่ให้มา`,
+    th: `ให้ข้อมูลเกี่ยวกับดิจิทัลการปกครองและระบบดิจิทัลของ ก.พ.ร. อ้างอิงจากแหล่งข้อมูลที่ให้มา`,
     en: `Provide information about digital government initiatives at OPDC. Reference provided sources.`
   },
   PUBLIC_SECTOR_DEVELOPMENT: {

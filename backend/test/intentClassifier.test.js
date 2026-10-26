@@ -27,7 +27,7 @@ const intentTests = [
     },
     {
         name: 'MISSION_AND_RESPONSIBILITIES',
-        message: 'พันฐกิจของ ก.พ.ร. มีอะไร',
+        message: 'ภารกิจของ ก.พ.ร. มีอะไร',
         expected: 'MISSION_AND_RESPONSIBILITIES'
     },
     {

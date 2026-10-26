@@ -55,13 +55,13 @@ const INTENT_KEYWORDS = {
 
   ORGANIZATION_INFORMATION: [
     'เป็นอะไร', 'คืออะไร', 'โครงสร้าง', 'ประวัติ', 'วิสัยทัศน์', 'vision',
-    'องค์ราศตรร', 'มีอะไรบ้าง', 'กพร', 'ก.พ.ร.', 'opdc', 'คณะกรรมการ',
+    'องค์กร', 'มีอะไรบ้าง', 'กพร', 'ก.พ.ร.', 'opdc', 'คณะกรรมการ',
     'คณะผู้บริหาร', 'executive', 'board', 'committee', 'มูลนิธิ', 'สมาชิก'
   ],
 
   MISSION_AND_RESPONSIBILITIES: [
-    'พันฐกิจ', 'mission', 'หน้าที่', 'รับผิดชอบ', 'ยุทธศาสตร์', 'strategic',
-    'กลยุทธ์', 'ประธานาธิบดี', 'รัฐมนตรี', 'คณะรัฐมนตรี', 'cabinet',
+    'ภารกิจ', 'mission', 'หน้าที่', 'รับผิดชอบ', 'ยุทธศาสตร์', 'strategic',
+    'กลยุทธ์', 'รัฐมนตรี', 'คณะรัฐมนตรี', 'cabinet',
     'หน้าที่รับผิดชอบ', 'วิชาการ', 'ปรึกษา', 'advice', 'policy', 'นโยบาย'
   ],
 
@@ -75,13 +75,13 @@ const INTENT_KEYWORDS = {
     'ปรับปรุง', 'นวัตกรรม', 'ดิจิทัล', 'digital', 'innovation',
     'ปรับปรุงการบริการ', 'service improvement', 'improve',
     'ระบบราชการ', 'government system', 'public service',
-    'ราชการดิจิทัล', 'e-government', 'อิเมลีเล็กทรอนิกส์'
+    'ราชการดิจิทัล', 'e-government', 'อิเล็กทรอนิกส์'
   ],
 
   LAWS_AND_REGULATIONS: [
-    'กฎหมาย', 'กฎรห�', 'ระเบียบ', 'พ.ร.บ.', 'q&a', 'q&amp;a',
-    'ข้อบังคับ', ' закон', 'law', 'regulation', 'legal',
-    'pdpa', 'ปกคค', 'คุ้มครองข้อมูล', 'ข้อมูลส่วนบุคคล'
+    'กฎหมาย', 'กฎระเบียบ', 'ระเบียบ', 'พ.ร.บ.', 'q&a', 'q&amp;a',
+    'ข้อบังคับ', 'law', 'regulation', 'legal',
+    'pdpa', 'คุ้มครองข้อมูลส่วนบุคคล'
   ],
 
   MANUALS_AND_DOCUMENTS: [
@@ -105,9 +105,9 @@ const INTENT_KEYWORDS = {
   ],
 
   DIGITAL_GOVERNMENT: [
-    'ดิจิทัล', 'digital', 'อิเมลีเล็กทรอนิกส์', 'อิเมล',
-    'online', 'ออนไลน์', 'ระบบอิเมลี', 'digital government',
-    'gov digital', 'thailand digital', 'ดิจิทัลการเจริญ'
+    'ดิจิทัล', 'digital', 'อิเล็กทรอนิกส์', 'อีเมล',
+    'online', 'ออนไลน์', 'ระบบอิเล็กทรอนิกส์', 'digital government',
+    'gov digital', 'thailand digital', 'ดิจิทัลการปกครอง'
   ],
 
   PUBLIC_SECTOR_DEVELOPMENT: [

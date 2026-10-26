@@ -53,19 +53,6 @@ const engine = new RAGEngine();
 const sessions = new Map();
 
 // Routes
-app.get('/', (req, res) => {
-    res.json({
-        service: 'OPDC Chatbot API',
-        status: 'running',
-        version: '1.0.0',
-        endpoints: {
-            chat: 'POST /v1/chat',
-            intents: 'GET /v1/intents',
-            sources: 'GET /v1/sources',
-            deleteSession: 'DELETE /v1/session/:id'
-        }
-    });
-});
 
 app.get('/health', (req, res) => {
     res.json({
@@ -81,13 +68,13 @@ app.get('/v1/intents', (req, res) => {
     // ทำ backward compatibility: แมป intent IDs เดิม
     const intentMap = {
         'GENERAL_GREETING': { name_th: 'การทักทาย', desc_th: 'ทักทายและสอบถามสถานะ' },
-        'ORGANIZATION_INFORMATION': { name_th: 'ข้อมูลองค์ราศตร์', desc_th: 'เกี่ยวกับ ก.พ.ร., โครงสร้าง, วิสัยทัศน์, พันฑกิจ' },
-        'MISSION_AND_RESPONSIBILITIES': { name_th: 'ภารกิจและหน้าที่', desc_th: 'พันฐกิจ หน้าที่รับผิดชอบ ยุทธศาสตร์' },
+        'ORGANIZATION_INFORMATION': { name_th: 'ข้อมูลองค์กร', desc_th: 'เกี่ยวกับ ก.พ.ร., โครงสร้าง, วิสัยทัศน์, ภารกิจ' },
+        'MISSION_AND_RESPONSIBILITIES': { name_th: 'ภารกิจและหน้าที่', desc_th: 'ภารกิจ หน้าที่รับผิดชอบ ยุทธศาสตร์' },
         'PUBLIC_SERVICES': { name_th: 'บริการสาธารณะ', desc_th: 'ขั้นตอนการให้บริการ' },
         'GOVERNMENT_SERVICE_IMPROVEMENT': { name_th: 'ปรับปรุงการบริการราชการ', desc_th: 'นวัตกรรม ดิจิทัล การปรับปรุง' },
-        'LAWS_AND_REGULATIONS': { name_th: 'กฎหมายและระเบียบ', desc_th: 'กฎหมาย ระเบียบ กฎรห�' },
+        'LAWS_AND_REGULATIONS': { name_th: 'กฎหมายและระเบียบ', desc_th: 'กฎหมาย ระเบียบ กฎระเบียบ' },
         'MANUALS_AND_DOCUMENTS': { name_th: 'คู่มือและเอกสาร', desc_th: 'เอกสาร PDF คู่มือ' },
-        'DIGITAL_GOVERNMENT': { name_th: 'ดิจิทัลการเจริญทรงด้านราชการ', desc_th: 'ดิจิทัล ออนไลน์ e-government' },
+        'DIGITAL_GOVERNMENT': { name_th: 'ดิจิทัลการปกครอง', desc_th: 'ดิจิทัล ออนไลน์ e-government' },
         'PUBLIC_SECTOR_DEVELOPMENT': { name_th: 'พัฒนาภาครัฐ', desc_th: 'พัฒนาระบบราชการ กลยุทธ์' },
         'CONTACT_AND_SUPPORT': { name_th: 'ช่องทางการติดต่อ', desc_th: 'ที่อยู่ เบอร์ อีเมล Facebook' },
         'DOCUMENT_SEARCH': { name_th: 'ค้นหาเอกสาร', desc_th: 'ค้นหาเอกสาร PDF รายงาน' },
@@ -157,7 +144,7 @@ app.post('/v1/chat', async (req, res) => {
         console.error('Error in /v1/chat:', error.message);
         const fallbackSid = req.body && req.body.session_id ? req.body.session_id : 'new-' + Date.now();
         res.status(500).json({
-            answer: 'ขออภัยครับ เกิดข้อผิดพลากภายในระบบ กรุณาลองใหม่อีกครั้ง',
+            answer: 'ขออภัยครับ เกิดข้อผิดพลาดภายในระบบ กรุณาลองใหม่อีกครั้ง',
             intent: 'INSUFFICIENT_INFORMATION',
             sources: [],
             session_id: fallbackSid,
