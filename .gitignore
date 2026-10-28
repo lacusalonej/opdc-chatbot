@@ -27,3 +27,7 @@ coverage/
 
 # โฟลเดอร์ย่อยที่เก็บคลัง Git ซ้อนกัน (ไม่ต้องอัปโหลด)
 opdc-chatbot/
+
+# ข้อมูลที่อัพโหลดโดยผู้ใช้งานและฐานความรู้เพิ่มเติม (สร้างขณะรันระบบ)
+knowledge/uploaded-knowledge.json
+backend/uploads/

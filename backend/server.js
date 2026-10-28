@@ -17,6 +17,8 @@ const path = require('path');
 const RAGEngine = require('./rag');
 const { processWithoutLLM } = require('./promptEngine');
 const { getValidIntents } = require('./intentClassifier');
+const createAdminRoutes = require('./adminRoutes');
+const KnowledgeManager = require('./utils/knowledgeManager');
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -48,6 +50,15 @@ app.get('/', (req, res) => {
 
 // ตั้งค่า RAG engine
 const engine = new RAGEngine();
+
+// ระบบจัดการความรู้ที่ผู้ใช้งานอัพโหลดเพิ่มเติม
+const km = new KnowledgeManager();
+
+// โหลด chunks ที่อัพโหลดไว้ก่อนหน้าเข้าสู่ engine (ไม่ต้องรีสตาร์ทเซิร์ฟเวอร์)
+const uploadedChunks = km.getChunks();
+if (uploadedChunks.length > 0) {
+    engine.addChunks(uploadedChunks);
+}
 
 // Session store (RAM only — PDPA compliant)
 const sessions = new Map();
@@ -161,6 +172,14 @@ app.delete('/v1/session/:id', (req, res) => {
     }
     return res.json({ status: 'not_found', session_id: id });
 });
+
+// เสิร์ฟหน้าแอดมินอัพโหลดไฟล์
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'admin', 'index.html'));
+});
+
+// ระบบอัพโหลดไฟล์และจัดการฐานความรู้ (แอดมิน)
+app.use('/v1/admin', createAdminRoutes(engine, km));
 
 // Error handler
 app.use((err, req, res, next) => {

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OPDC Chatbot - แอดมินอัพโหลดข้อมูล</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8fafc; color: #1a1a2e; line-height: 1.6; padding: 20px; }
+    .container { max-width: 700px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; }
+    .header { background: #1e3c72; color: #ffffff; padding: 24px; text-align: center; }
+    .header h1 { font-size: 1.4rem; font-weight: 600; }
+    .header p { font-size: 0.9rem; opacity: 0.9; margin-top: 6px; }
+    .content { padding: 24px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #f9fafb; }
+    .card h3 { font-size: 1rem; margin-bottom: 12px; color: #1e3c72; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
+    .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.95rem; }
+    .form-group input:focus { outline: none; border-color: #2a5298; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: #ffffff; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-danger { background: #dc2626; color: #ffffff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+    .file-list { margin-top: 16px; }
+    .file-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; background: #ffffff; }
+    .file-info { flex: 1; }
+    .file-name { font-weight: 600; color: #1a1a2e; }
+    .file-meta { font-size: 0.8rem; color: #6b7280; margin-top: 4px; }
+    .status { margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: 0.9rem; display: none; }
+    .status.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; display: block; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
+    .status.info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; display: block; }
+    .empty { text-align: center; color: #6b7280; font-style: italic; padding: 20px; }
+    .admin-key-notice { font-size: 0.8rem; color: #6b7280; margin-top: 8px; }
+    .admin-key-notice code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+    .loading { display: none; text-align: center; padding: 12px; color: #6b7280; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🛡️ OPDC Chatbot Admin</h1>
+      <p>ระบบหลังบ้านสำหรับอัพโหลดไฟล์เสริมฐานความรู้</p>
+    </div>
+
+    <div class="content">
+      <!-- รหัสผ่านแอดมิน -->
+      <div class="card">
+        <h3>🔐 ยืนยันตัวตนแอดมิน</h3>
+        <div class="form-group">
+          <label for="adminKey">รหัสผ่านแอดมิน (Admin Key)</label>
+          <input type="password" id="adminKey" placeholder="ใส่รหัสผ่านแอดมิน">
+          <div class="admin-key-notice">ค่าเริ่มต้น: <code>opdc-admin-2026</code> (สามารถเปลี่ยนได้ผ่านตัวแปรสภาพแวดล้อม ADMIN_UPLOAD_KEY)</div>
+        </div>
+        <button class="btn btn-primary" onclick="saveAdminKey()">บันทึกรหัสผ่าน</button>
+        <div id="authStatus" class="status"></div>
+      </div>
+
+      <!-- อัพโหลดไฟล์ -->
+      <div class="card">
+        <h3>📤 อัพโหลดไฟล์เสริมข้อมูล</h3>
+        <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 12px;">รองรับไฟล์ .txt และ .pdf ขนาดไม่เกิน 10 MB ข้อความในไฟล์จะถูกแยกเป็นชิ้นข้อมูลเพื่อให้ Chatbot ตอบคำถามได้</p>
+        <div class="form-group">
+          <label for="fileInput">เลือกไฟล์</label>
+          <input type="file" id="fileInput" accept=".txt,.pdf">
+        </div>
+        <button class="btn btn-primary" id="uploadBtn" onclick="uploadFile()" disabled>อัพโหลดไฟล์</button>
+        <div id="uploadStatus" class="status"></div>
+        <div class="loading" id="loading">กำลังอัพโหลด...</div>
+      </div>
+
+      <!-- รายการไฟล์ที่อัพโหลด -->
+      <div class="card">
+        <h3>📋 รายการไฟล์ที่อัพโหลดแล้ว</h3>
+        <div id="fileList" class="file-list">
+          <div class="empty">ยังไม่มีไฟล์ที่อัพโหลด</div>
+        </div>
+        <button class="btn btn-primary" onclick="loadFiles()" style="margin-top: 12px;">รีเฟรชรายการ</button>
+        <div id="filesStatus" class="status"></div>
+      </div>
+
+      <!-- ลิงก์กลับหน้าแชท -->
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="/" style="color: #2a5298; text-decoration: none;">← กลับไปหน้าแชททดสอบ</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let adminKey = '';
+    let uploadStatus = document.getElementById('uploadStatus');
+    let fileListEl = document.getElementById('fileList');
+    let uploadBtn = document.getElementById('uploadBtn');
+    let fileInput = document.getElementById('fileInput');
+    let loading = document.getElementById('loading');
+
+    const API_BASE = window.location.origin;
+
+    function showStatus(el, message, type = 'success') {
+      el.textContent = message;
+      el.className = `status ${type}`;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+
+    function saveAdminKey() {
+      const keyInput = document.getElementById('adminKey');
+      adminKey = keyInput.value.trim();
+      if (!adminKey) {
+        showStatus(document.getElementById('authStatus'), 'กรุณาใส่รหัสผ่านแอดมิน', 'error');
+        return;
+      }
+      showStatus(document.getElementById('authStatus'), 'บันทึกรหัสผ่านแอดมินแล้ว พร้อมอัพโหลดไฟล์', 'success');
+      uploadBtn.disabled = false;
+    }
+
+    fileInput.addEventListener('change', () => {
+      uploadBtn.disabled = !fileInput.files.length || !adminKey;
+    });
+
+    async function uploadFile() {
+      const file = fileInput.files[0];
+      if (!file) return;
+      if (!adminKey) {
+        showStatus(uploadStatus, 'กรุณาใส่รหัสผ่านแอดมินก่อนอัพโหลด', 'error');
+        return;
+      }
+
+      loading.style.display = 'block';
+      uploadBtn.disabled = true;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch(`${API_BASE}/v1/admin/upload`, {
+          method: 'POST',
+          headers: { 'X-Admin-Key': adminKey },
+          body: formData
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showStatus(uploadStatus, data.message, 'success');
+          fileInput.value = '';
+          uploadBtn.disabled = true;
+          loadFiles();
+        } else {
+          showStatus(uploadStatus, data.error || 'อัพโหลดไม่สำเร็จ', 'error');
+        }
+      } catch (err) {
+        showStatus(uploadStatus, 'เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + err.message, 'error');
+      } finally {
+        loading.style.display = 'none';
+        uploadBtn.disabled = !adminKey;
+      }
+    }
+
+    async function loadFiles() {
+      try {
+        const res = await fetch(`${API_BASE}/v1/admin/files?admin_key=${encodeURIComponent(adminKey)}`);
+        const data = await res.json();
+
+        if (res.ok && data.files) {
+          fileListEl.innerHTML = '';
+          if (data.files.length === 0) {
+            fileListEl.innerHTML = '<div class="empty">ยังไม่มีไฟล์ที่อัพโหลด</div>';
+          } else {
+            data.files.forEach(f => {
+              const div = document.createElement('div');
+              div.className = 'file-item';
+              div.innerHTML = `
+                <div class="file-info">
+                  <div class="file-name">${escapeHtml(f.filename)}</div>
+                  <div class="file-meta">อัพโหลดเมื่อ: ${f.uploadedAt || 'ไม่ทราบ'} • ${f.chunkCount} ชิ้นข้อมูล</div>
+                </div>
+                <div>
+                  ${f.chunkIds.map(cid => `<button class="btn btn-danger btn-sm" onclick="deleteChunk('${escapeHtml(cid)}')" title="ลบชิ้นข้อมูลนี้">ลบ</button>`).join(' ')}
+                </div>
+              `;
+              fileListEl.appendChild(div);
+            });
+          }
+          showStatus(document.getElementById('filesStatus'), `พบ ${data.totalChunks} ชิ้นข้อมูลจาก ${data.files.length} ไฟล์`, 'info');
+        } else {
+          showStatus(document.getElementById('filesStatus'), data.error || 'โหลดรายการไม่สำเร็จ', 'error');
+        }
+      } catch (err) {
+        showStatus(document.getElementById('filesStatus'), 'เกิดข้อผิดพลาด: ' + err.message, 'error');
+      }
+    }
+
+    async function deleteChunk(chunkId) {
+      if (!confirm('ยืนยันลบชิ้นข้อมูลนี้หรือไม่?')) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/v1/admin/files/${chunkId}`, {
+          method: 'DELETE',
+          headers: { 'X-Admin-Key': adminKey }
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showStatus(document.getElementById('filesStatus'), data.message, 'success');
+          loadFiles();
+        } else {
+          showStatus(document.getElementById('filesStatus'), data.error || 'ลบไม่สำเร็จ', 'error');
+        }
+      } catch (err) {
+        showStatus(document.getElementById('filesStatus'), 'เกิดข้อผิดพลาด: ' + err.message, 'error');
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // โหลดรายการไฟล์เมื่อเปิดหน้า
+    loadFiles();
+  </script>
+</body>
+</html>

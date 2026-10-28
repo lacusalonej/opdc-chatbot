@@ -289,6 +289,42 @@ class RAGEngine {
             retrievalScore: null
         }));
     }
+
+    /**
+     * เพิ่ม chunks ใหม่เข้าไปในฐานความรู้แบบ real-time (ไม่ต้องรีสตาร์ทเซิร์ฟเวอร์)
+     * ใช้หลังจากอัพโหลดไฟล์และแยกข้อความเป็น chunks แล้ว
+     *
+     * @param {Array<Object>} newChunks - รายการ chunks ใหม่
+     * @returns {Array<Object>} chunks ทั้งหมดใน engine หลังจากเพิ่มแล้ว
+     */
+    addChunks(newChunks) {
+        if (!Array.isArray(newChunks) || newChunks.length === 0) {
+            return this.chunks;
+        }
+
+        // จัดการฟิลด์ให้เข้ากับรูปแบบเดิม (text <-> content)
+        for (const chunk of newChunks) {
+            if (chunk.text && !chunk.content) {
+                chunk.content = chunk.text;
+            }
+            chunk.text = chunk.content;
+        }
+
+        this.chunks.push(...newChunks);
+        return this.chunks;
+    }
+
+    /**
+     * ลบ chunk ออกจาก engine ตาม id
+     *
+     * @param {string} chunkId - รหัส chunk ที่ต้องการลบ
+     * @returns {boolean} true ถ้าลบสำเร็จ, false ถ้าไม่พบ
+     */
+    removeChunk(chunkId) {
+        const before = this.chunks.length;
+        this.chunks = this.chunks.filter(c => c.id !== chunkId);
+        return this.chunks.length < before;
+    }
 }
 
 module.exports = RAGEngine;
