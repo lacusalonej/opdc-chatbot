@@ -35,5 +35,8 @@ backend/uploads/
 # ไฟล์โทเค็นเซสชันและฐานข้อมูลรันไทม์จากการทดสอบด้วยมือ (ห้าม commit ลง Git)
 backend/cookies.txt
 backend/cookies_invalid.txt
-backend/database/
+# ไฟล์ฐานข้อมูลรันไทม์ (สร้างขณะรันระบบ ไม่ควร commit)
+backend/database/*.db
+backend/database/*.db-shm
+backend/database/*.db-wal
 backend/test_manual_verify.js
