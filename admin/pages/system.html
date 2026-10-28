@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบและรายงาน | OPDC Chatbot Admin</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span>🛡️</span> OPDC Chatbot Admin
+    </div>
+    <div class="user-info">
+      <span id="nav-user" style="display:none;"></span>
+      <span id="nav-role" class="badge-role" style="display:none;"></span>
+      <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;">ออกจากระบบ</button>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <a href="dashboard.html" data-auth-required>แดชบอร์ด</a>
+    <a href="knowledge.html" data-auth-required>จัดการความรู้</a>
+    <a href="intents.html" data-auth-required>จัดการ Intent</a>
+    <a href="prompts.html" data-auth-required>ตั้งค่า Prompt</a>
+    <a href="conversations.html" data-auth-required>ประวัติการสนทนา</a>
+    <a href="system.html" data-auth-required class="active">ระบบและรายงาน</a>
+    <a href="login.html" id="nav-login-btn">เข้าสู่ระบบ</a>
+  </nav>
+
+  <main class="app-main">
+    <div id="systemStatus" class="status"></div>
+
+    <h1 class="page-title" data-auth-required>ระบบและรายงาน</h1>
+    <p class="page-subtitle" data-auth-required>ตรวจสอบสถานะระบบ ดูบันทึกการดำเนินการ และจัดการคอนฟิกส่วนกลาง</p>
+
+    <div class="stats-grid" data-auth-required style="margin-bottom:20px;">
+      <div class="stat-card">
+        <div class="stat-icon" id="healthIcon">⏳</div>
+        <div>
+          <div class="stat-value" id="healthStatus">-</div>
+          <div class="stat-label">สถานะระบบ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-auth-required>
+      <div class="card-header">
+        <h3>บันทึกการดำเนินการ (Audit Logs)</h3>
+      </div>
+      <div class="card-body">
+        <div id="auditList" class="loading">กำลังโหลดบันทึก...</div>
+      </div>
+    </div>
+
+    <div class="card" data-auth-required>
+      <div class="card-header">
+        <h3>คอนฟิกส่วนกลาง (ระบบ)</h3>
+        <div data-role-admin><button class="btn btn-primary btn-sm" onclick="toggleConfigEdit()">เพิ่ม/แก้ไขคอนฟิก</button></div>
+      </div>
+      <div class="card-body">
+        <div id="configList" class="loading">กำลังโหลดคอนฟิก...</div>
+        <div id="configEdit" style="display:none; margin-top:16px;">
+          <form id="configForm">
+            <div class="form-group">
+              <label for="configKey">Key</label>
+              <input type="text" id="configKey" name="key" placeholder="เช่น site_title" required>
+            </div>
+            <div class="form-group">
+              <label for="configValue">Value</label>
+              <input type="text" id="configValue" name="value" placeholder="ค่าของคอนฟิก" required>
+            </div>
+            <div class="form-group">
+              <label for="configDesc">คำอธิบาย</label>
+              <input type="text" id="configDesc" name="description" placeholder="คำอธิบาย (ตัวเลือก)">
+            </div>
+            <button type="submit" class="btn btn-primary">บันทึกคอนฟิก</button>
+            <button type="button" class="btn btn-secondary" onclick="toggleConfigEdit()">ยกเลิก</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/app.js"></script>
+  <script>
+    (function () {
+      let configEditing = false;
+
+      window.toggleConfigEdit = function () {
+        configEditing = !configEditing;
+        document.getElementById('configEdit').style.display = configEditing ? '' : 'none';
+      };
+
+      async function loadHealth() {
+        try {
+          const res = await window.AdminApp.apiRequest('/system/health');
+          const h = document.getElementById('healthStatus');
+          const icon = document.getElementById('healthIcon');
+          if (res && res.ok) {
+            h.textContent = 'ปกติ';
+            h.style.color = '#166534';
+            icon.textContent = '✅';
+          } else {
+            h.textContent = 'ผิดปกติ';
+            h.style.color = '#dc2626';
+            icon.textContent = '❌';
+          }
+        } catch (err) {
+          document.getElementById('healthStatus').textContent = 'ตรวจสอบไม่สำเร็จ';
+          document.getElementById('healthStatus').style.color = '#dc2626';
+          document.getElementById('healthIcon').textContent = '❌';
+        }
+      }
+
+      async function loadAuditLogs() {
+        const el = document.getElementById('auditList');
+        el.innerHTML = '<div class="loading">กำลังโหลดบันทึกการดำเนินการ...</div>';
+        try {
+          const res = await window.AdminApp.apiRequest('/system/audit-logs');
+          if (res && res.ok) {
+            const logs = res.data.logs || [];
+            if (logs.length === 0) {
+              el.innerHTML = '<div class="empty">ยังไม่มีบันทึกการดำเนินการ</div>';
+              return;
+            }
+            let html = '<table><thead><tr><th>เวลา</th><th>ผู้ใช้</th><th>การดำเนินการ</th><th>ประเภท</th><th>รหัสอ้างอิง</th></tr></thead><tbody>';
+            logs.forEach((l) => {
+              const time = (l.created_at || '').slice(0, 16).replace('T', ' ');
+              html += '<tr>' +
+                '<td>' + window.AdminApp.escapeHtml(time) + '</td>' +
+                '<td>' + window.AdminApp.escapeHtml(l.username || '-') + '</td>' +
+                '<td>' + window.AdminApp.escapeHtml(l.action || '-') + '</td>' +
+                '<td>' + window.AdminApp.escapeHtml(l.entity_type || '-') + '</td>' +
+                '<td>' + window.AdminApp.escapeHtml(l.entity_id || '-') + '</td>' +
+              '</tr>';
+            });
+            html += '</tbody></table>';
+            el.innerHTML = html;
+          }
+        } catch (err) {
+          el.innerHTML = '<div class="status error show">โหลดบันทึกไม่สำเร็จ: ' + window.AdminApp.escapeHtml(err.message) + '</div>';
+        }
+      }
+
+      async function loadConfigs() {
+        const listEl = document.getElementById('configList');
+        listEl.innerHTML = '<div class="loading">กำลังโหลดคอนฟิก...</div>';
+        try {
+          const res = await window.AdminApp.apiRequest('/system/config');
+          if (res && res.ok) {
+            const configs = res.data.configs || [];
+            if (configs.length === 0) {
+              listEl.innerHTML = '<div class="empty">ยังไม่มีคอนฟิกส่วนกลาง</div>';
+              return;
+            }
+            let html = '<table><thead><tr><th>Key</th><th>Value</th><th>คำอธิบาย</th><th>อัปเดตเมื่อ</th><th style="width:120px;">การดำเนินการ</th></tr></thead><tbody>';
+            configs.forEach((cfg) => {
+              html += '<tr>' +
+                '<td><code>' + window.AdminApp.escapeHtml(cfg.key) + '</code></td>' +
+                '<td>' + window.AdminApp.escapeHtml(cfg.value) + '</td>' +
+                '<td>' + window.AdminApp.escapeHtml(cfg.description || '-') + '</td>' +
+                '<td>' + window.AdminApp.escapeHtml((cfg.updated_at || '').slice(0, 16)) + '</td>' +
+                '<td class="actions">' +
+                  '<button class="btn btn-primary btn-sm" onclick="editConfig(\'' + window.AdminApp.escapeHtml(cfg.key) + '\', \'' + window.AdminApp.escapeHtml(cfg.value) + '\', \'' + window.AdminApp.escapeHtml(cfg.description || '') + '\')">แก้ไข</button>' +
+                '</td>' +
+              '</tr>';
+            });
+            html += '</tbody></table>';
+            listEl.innerHTML = html;
+          }
+        } catch (err) {
+          listEl.innerHTML = '<div class="status error show">โหลดคอนฟิกไม่สำเร็จ: ' + window.AdminApp.escapeHtml(err.message) + '</div>';
+        }
+      }
+
+      window.editConfig = function (key, value, desc) {
+        document.getElementById('configKey').value = key;
+        document.getElementById('configValue').value = value;
+        document.getElementById('configDesc').value = desc;
+        toggleConfigEdit();
+      };
+
+      document.getElementById('configForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'กำลังบันทึก...';
+
+        const key = document.getElementById('configKey').value.trim();
+        const value = document.getElementById('configValue').value.trim();
+        const description = document.getElementById('configDesc').value.trim();
+
+        try {
+          const res = await window.AdminApp.apiRequest('/system/config/' + key, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value, description }),
+          });
+          if (res && res.ok) {
+            window.AdminApp.showStatus('systemStatus', 'บันทึกคอนฟิกแล้ว', 'success');
+            toggleConfigEdit();
+            loadConfigs();
+          }
+        } catch (err) {
+          window.AdminApp.showStatus('systemStatus', err.message || 'บันทึกไม่สำเร็จ', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'บันทึกคอนฟิก';
+        }
+      });
+
+      loadHealth();
+      loadAuditLogs();
+      loadConfigs();
+    })();
+  </script>
+</body>
+</html>

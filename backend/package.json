@@ -11,11 +11,15 @@
     "test:watch": "node --watch test.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5",
+    "bcrypt": "^6.0.0",
     "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0",
     "multer": "^1.4.5-lts.1",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "sqlite3": "^6.0.1"
   },
   "engines": {
     "node": ">=18.0.0"

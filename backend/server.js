@@ -2,17 +2,14 @@
  * Express Backend สำหรับ Chatbot ก.พ.ร.
  * - POST /v1/chat — ส่งคำถามและได้คำตอบ
  * - GET /v1/intents — แสดง intents ที่ recognize ได้
- * - GET /v1/sources — แสดงแหลงข้อมูล
+ * - GET /v1/sources — แสดงแหล่งข้อมูล
  * - DELETE /v1/session/:id — ทำให้ session หมดอายุ (PDPA)
- *
- * ปรับปรุงเพื่อบูรณาการกับ Prompt Engine:
- * - ใช้ IntentClassifier ใหม่ (14 intents)
- * - ใช้ PromptEngine สำหรับการสร้าง prompt
- * - เพิ่ม fields เลือกได้ (citations, insufficient_evidence) ใน POST /v1/chat
- * - รักษา backward compatibility ของ response schema เดิม
+ * - POST /api/admin/v1/* — ระบบหลังบ้านแอดมิน (ตรวจสอบสิทธิ์, RBAC)
  */
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
+const crypto = require('crypto');
 const path = require('path');
 const RAGEngine = require('./rag');
 const { processWithoutLLM } = require('./promptEngine');
@@ -20,8 +17,26 @@ const { getValidIntents } = require('./intentClassifier');
 const createAdminRoutes = require('./adminRoutes');
 const KnowledgeManager = require('./utils/knowledgeManager');
 
+// ระบบหลังบ้านใหม่ (ฐานข้อมูล SQLite + เส้นทาง API แอดมิน)
+const { initialize: initDb, close: closeDb } = require('./database/db');
+const adminAuthRoutes = require('./routes/admin/auth');
+const adminDashboardRoutes = require('./routes/admin/dashboard');
+const adminKnowledgeRoutes = require('./routes/admin/knowledge');
+const adminIntentsRoutes = require('./routes/admin/intents');
+const adminPromptRoutes = require('./routes/admin/prompt');
+const adminConversationsRoutes = require('./routes/admin/conversations');
+const adminSystemRoutes = require('./routes/admin/system');
+
 const app = express();
 const PORT = process.env.PORT || 8001;
+
+// ตรวจสอบ secret สำหรับเข้ารหัสเซสชัน (ห้ามใช้ค่า default ที่ hardcode ไว้ใน production)
+const sessionSecret = process.env.ADMIN_SESSION_SECRET
+    || (process.env.NODE_ENV === 'production' ? undefined : crypto.randomBytes(32).toString('hex'));
+if (!sessionSecret) {
+    console.error('[FATAL] ADMIN_SESSION_SECRET ต้องถูกตั้งค่าในตัวแปรสภาพแวดล้อมเมื่อรันใน production');
+    process.exit(1);
+}
 
 // Middleware
 app.use(cors({
@@ -35,12 +50,25 @@ app.use(cors({
         'http://127.0.0.1:8000',
         'http://127.0.0.1:8001'
     ],
-    methods: ['GET', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-Type']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'X-Admin-Key', 'X-CSRF-Token'],
+    credentials: true,
 }));
 app.use(express.json());
+app.use(session({
+    name: 'session_id',
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000, // 24 ชั่วโมง
+    },
+}));
 
-// เสิร์ฟ static files (หน้าแชท) จากโฟลเดอร์ parent
+// เสิร์ฟ static files (หน้าแชทและหน้าแอดมิน) จากโฟลเดอร์ parent
 app.use(express.static(path.join(__dirname, '..')));
 
 // Root route -> เสิร์ฟหน้าแชท
@@ -60,8 +88,8 @@ if (uploadedChunks.length > 0) {
     engine.addChunks(uploadedChunks);
 }
 
-// Session store (RAM only — PDPA compliant)
-const sessions = new Map();
+// Session store สำหรับแชท (RAM only — PDPA compliant)
+const chatSessions = new Map();
 
 // Routes
 
@@ -120,7 +148,7 @@ app.post('/v1/chat', async (req, res) => {
 
         // จัดเตรียมประวัติการสนทนา (ถ้ามี)
         const sid = session_id || 'new-' + Date.now();
-        const history = sessions.has(sid) ? sessions.get(sid) : [];
+        const history = chatSessions.has(sid) ? chatSessions.get(sid) : [];
 
         // ค้นหาจาก RAG engine ที่มีอยู่
         const ragResult = engine.answer(message.trim());
@@ -145,10 +173,10 @@ app.post('/v1/chat', async (req, res) => {
         };
 
         // Session-based memory (RAM only — deleted after session ends)
-        if (!sessions.has(sid)) {
-            sessions.set(sid, []);
+        if (!chatSessions.has(sid)) {
+            chatSessions.set(sid, []);
         }
-        sessions.get(sid).push({ user: message.trim(), bot: response.answer });
+        chatSessions.get(sid).push({ user: message.trim(), bot: response.answer });
 
         res.json(response);
     } catch (error) {
@@ -166,20 +194,29 @@ app.post('/v1/chat', async (req, res) => {
 
 app.delete('/v1/session/:id', (req, res) => {
     const { id } = req.params;
-    if (sessions.has(id)) {
-        sessions.delete(id);
+    if (chatSessions.has(id)) {
+        chatSessions.delete(id);
         return res.json({ status: 'deleted', session_id: id });
     }
     return res.json({ status: 'not_found', session_id: id });
 });
 
-// เสิร์ฟหน้าแอดมินอัพโหลดไฟล์
+// เสิร์ฟหน้าแอดมินอัพโหลดไฟล์ (เดิม)
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'admin', 'index.html'));
 });
 
-// ระบบอัพโหลดไฟล์และจัดการฐานความรู้ (แอดมิน)
+// ระบบอัพโหลดไฟล์และจัดการฐานความรู้ (แอดมินเดิม)
 app.use('/v1/admin', createAdminRoutes(engine, km));
+
+// ============ ระบบหลังบ้านใหม่: /api/admin/v1 ============
+app.use('/api/admin/v1/auth', adminAuthRoutes);
+app.use('/api/admin/v1/dashboard', adminDashboardRoutes);
+app.use('/api/admin/v1/knowledge', adminKnowledgeRoutes);
+app.use('/api/admin/v1/intents', adminIntentsRoutes);
+app.use('/api/admin/v1/prompt', adminPromptRoutes);
+app.use('/api/admin/v1/conversations', adminConversationsRoutes);
+app.use('/api/admin/v1/system', adminSystemRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -187,16 +224,25 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`
+// Start server (หลังจากฐานข้อมูลพร้อมแล้ว)
+initDb().then(() => {
+    app.listen(PORT, () => {
+        console.log(`
 ||
-||        OPDC Chatbot Backend (with Prompt Engine)                 ||
+||        OPDC Chatbot Backend (with Admin Dashboard)                 ||
 ||
 ||  Server: http://localhost:${PORT}             ||
 ||  API:    http://localhost:${PORT}/v1/chat     ||
 ||  Health: http://localhost:${PORT}/health      ||
 ||  Chunks: ${engine.chunks.length} loaded                        ||
 ||
-    `);
+        `);
+    });
+}).catch((err) => {
+    console.error('[FATAL] Failed to initialize database:', err.message);
+    process.exit(1);
 });
+
+// ปิดฐานข้อมูลอย่างปลอดภัยเมื่อเซิร์ฟเวอร์หยุดทำงาน
+process.on('SIGTERM', () => closeDb().catch(() => {}));
+process.on('SIGINT', () => closeDb().catch(() => {}));

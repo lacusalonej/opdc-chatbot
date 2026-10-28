@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ | OPDC Chatbot Admin</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <h2>🔐 เข้าสู่ระบบแอดมิน</h2>
+      <p style="text-align:center; color:#6b7280; font-size:0.85rem; margin-bottom:24px;">
+        ระบบหลังบ้าน Chatbot ก.พ.ร. (OPDC)
+      </p>
+
+      <div id="loginStatus" class="status"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">ชื่อผู้ใช้</label>
+          <input type="text" id="username" name="username" placeholder="ใส่ชื่อผู้ใช้" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="password">รหัสผ่าน</label>
+          <input type="password" id="password" name="password" placeholder="ใส่รหัสผ่าน" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100;" id="loginBtn">เข้าสู่ระบบ</button>
+      </form>
+
+      <div class="login-footer">
+        <p>ยังไม่มีบัญชีผู้ใช้? ให้ผู้ดูแลระบบสร้างบัญชีแรกผ่านคำสั่ง:</p>
+        <code style="display:block; background:#f3f4f6; padding:8px; border-radius:4px; font-size:0.8rem; word-break:break-all; margin:8px 0;">
+          ADMIN_USERNAME=admin ADMIN_PASSWORD=รหัสผ่านของคุณ node backend/scripts/create-admin.js
+        </code>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('loginForm');
+      const btn = document.getElementById('loginBtn');
+      const statusEl = document.getElementById('loginStatus');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusEl.classList.remove('show');
+        btn.disabled = true;
+        btn.textContent = 'กำลังเข้าสู่ระบบ...';
+
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        try {
+          await window.AdminApp.login(username, password);
+          showStatus('loginStatus', 'ล็อกอินสำเร็จ กำลังนำไปยังหน้าแดชบอร์ด...', 'success');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+        } catch (err) {
+          showStatus('loginStatus', err.message || 'ล็อกอินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'เข้าสู่ระบบ';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
