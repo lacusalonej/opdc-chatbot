@@ -3,66 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>จัดการความรู้ | OPDC Chatbot Admin</title>
+  <title>จัดการฐานความรู้ | OPDC Chatbot Admin</title>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <span>🛡️</span> OPDC Chatbot Admin
-    </div>
-    <div class="user-info">
-      <span id="nav-user" style="display:none;"></span>
-      <span id="nav-role" class="badge-role" style="display:none;"></span>
-      <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;">ออกจากระบบ</button>
-    </div>
-  </header>
-
-  <nav class="app-nav">
-    <a href="dashboard.html" data-auth-required>แดชบอร์ด</a>
-    <a href="knowledge.html" data-auth-required class="active">จัดการความรู้</a>
-    <a href="intents.html" data-auth-required>จัดการ Intent</a>
-    <a href="prompts.html" data-auth-required>ตั้งค่า Prompt</a>
-    <a href="conversations.html" data-auth-required>ประวัติการสนทนา</a>
-    <a href="system.html" data-auth-required>ระบบและรายงาน</a>
-    <a href="login.html" id="nav-login-btn">เข้าสู่ระบบ</a>
-  </nav>
-
-  <main class="app-main">
-    <div id="knowledgeStatus" class="status"></div>
-
-    <h1 class="page-title" data-auth-required>จัดการฐานความรู้</h1>
-    <p class="page-subtitle" data-auth-required>เพิ่ม แก้ไข หรือลบชิ้นข้อมูลความรู้ที่ใช้ตอบคำถามใน Chatbot</p>
-
-    <div class="card" data-auth-required>
-      <div class="card-header">
-        <h3>เพิ่มชิ้นข้อมูลใหม่</h3>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <span>🛡️</span> OPDC Chatbot Admin
       </div>
-      <div class="card-body">
-        <form id="addChunkForm">
-          <div class="form-group">
-            <label for="chunkTitle">ชื่อหรือที่มา (เช่น ชื่อไฟล์)</label>
-            <input type="text" id="chunkTitle" name="title" placeholder="เช่น นโยบายการลาป่วย.pdf" required>
+      <div class="user-info">
+        <span id="nav-user" style="display:none;"></span>
+        <span id="nav-role" class="badge-role" style="display:none;"></span>
+        <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;" data-action="logout">ออกจากระบบ</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <nav class="app-nav">
+        <div class="nav-brand">
+          <span>🛡️</span> OPDC Chatbot Admin
+        </div>
+        <a href="dashboard.html" data-auth-required>ภาพรวม</a>
+        <a href="knowledge.html" data-auth-required class="active">จัดการฐานความรู้</a>
+        <a href="intents.html" data-auth-required>จัดการ Intent</a>
+        <a href="prompts.html" data-auth-required>ตั้งค่า Prompt</a>
+        <a href="conversations.html" data-auth-required>ประวัติการสนทนา</a>
+        <a href="system.html" data-auth-required>ระบบและรายงาน</a>
+        <a href="login.html" id="nav-login-btn">เข้าสู่ระบบ</a>
+        <div class="nav-quick">
+          <div>ทางลัด</div>
+          <a href="knowledge.html" class="btn btn-success btn-sm" style="width:100%;justify-content:center;">อัปโหลดเอกสาร</a>
+          <a href="knowledge.html" class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;margin-top:8px;">เพิ่มข้อความ</a>
+        </div>
+      </nav>
+
+      <main class="app-main">
+        <div id="knowledgeStatus" class="status"></div>
+
+        <div class="page-header" data-auth-required>
+          <div class="greeting">
+            <div class="hello">จัดการฐานความรู้</div>
+            <div class="name">เพิ่ม แก้ไข หรือลบชิ้นข้อมูลที่แชตบอตใช้อ้างอิง</div>
           </div>
-          <div class="form-group">
-            <label for="chunkContent">เนื้อหาข้อความ</label>
-            <textarea id="chunkContent" name="content" rows="6" placeholder="วางข้อความที่ต้องการให้ Chatbot อ้างอิงได้..." required></textarea>
-            <div class="form-hint">ข้อความจะถูกแยกเป็นชิ้นย่อยโดยอัตโนมัติเพื่อให้ค้นหาได้ง่ายขึ้น</div>
+          <nav class="pill-nav" aria-label="นำทางหลัก">
+            <a href="dashboard.html">ภาพรวม</a>
+            <a href="knowledge.html" class="active">ฐานความรู้</a>
+            <a href="conversations.html">แหล่งข้อมูล</a>
+            <a href="system.html">กิจกรรม</a>
+          </nav>
+          <div class="actions">
+            <button class="btn btn-success" id="btnAddKnowledge">+ เพิ่มข้อมูลให้แชตบอต</button>
           </div>
-          <button type="submit" class="btn btn-success" id="addChunkBtn">เพิ่มชิ้นข้อมูล</button>
-        </form>
-      </div>
-    </div>
+        </div>
 
-    <div class="card" data-auth-required>
-      <div class="card-header">
-        <h3>รายการชิ้นข้อมูลทั้งหมด (<span id="chunkTotal">0</span>)</h3>
-      </div>
-      <div class="card-body">
-        <div id="chunkList" class="loading">กำลังโหลดรายการ...</div>
-      </div>
+        <!-- Add chunk form -->
+        <div class="card" data-auth-required>
+          <div class="card-header">
+            <h3>เพิ่มชิ้นข้อมูลใหม่</h3>
+          </div>
+          <div class="card-body">
+            <form id="addChunkForm">
+              <div class="form-group">
+                <label for="chunkTitle">ชื่อหรือที่มา (เช่น ชื่อไฟล์)</label>
+                <input type="text" id="chunkTitle" name="title" placeholder="เช่น นโยบายการลาป่วย.pdf" required>
+              </div>
+
+              <div class="form-group">
+                <label for="chunkFile">อัพโหลดไฟล์ (PDF / ข้อความ)</label>
+                <input type="file" id="chunkFile" name="file" accept=".pdf,.txt">
+                <div class="form-hint">รองรับไฟล์ PDF และไฟล์ข้อความ (.txt) ขนาดไม่เกิน 10 MB ไฟล์ Word (.docx) ยังไม่รองรับในขณะนี้</div>
+              </div>
+
+              <div class="form-group">
+                <label for="chunkLink">ลิงก์ข้อมูลเสริม (ตัวเลือก)</label>
+                <input type="url" id="chunkLink" name="sourceUrl" placeholder="เช่น https://www.opdc.go.th/document/policy.pdf">
+                <div class="form-hint">ใส่ลิงก์อ้างอิงแหล่งที่มาของข้อมูลนี้ (ไม่บังคับ)</div>
+              </div>
+
+              <div class="form-group">
+                <label for="chunkContent">เนื้อหาข้อความเพิ่มเติม (ตัวเลือก)</label>
+                <textarea id="chunkContent" name="content" rows="4" placeholder="หากอัพโหลดไฟล์แล้ว สามารถเว้นข้อความนี้ไว้ก็ได้"></textarea>
+                <div class="form-hint">หรือวางข้อความที่ต้องการให้ Chatbot อ้างอิงได้โดยตรง ข้อความจะถูกแยกเป็นชิ้นย่อยโดยอัตโนมัติ</div>
+              </div>
+
+              <div class="form-hint" style="margin-top:8px;">
+                💡 คุณสามารถอัพโหลดไฟล์ อย่างเดียว ใส่ลิงก์ อย่างเดียว หรือใส่ทั้งหมดก็ได้
+              </div>
+
+              <button type="submit" class="btn btn-success" id="addChunkBtn">เพิ่มชิ้นข้อมูล</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- URL import: honest notice, backend does not support it -->
+        <div class="card" data-auth-required>
+          <div class="card-header">
+            <h3>นำเข้าจาก URL</h3>
+          </div>
+          <div class="card-body">
+            <p>ระบบยังไม่รองรับการดึงข้อมูลจาก URL ในฝั่ง backend การเปิดหน้าเว็บภายนอกอาจมีความเสี่ยงด้านความมั่นคง (SSRF) จึงยังไม่เปิดให้ใช้งานในขณะนี้</p>
+            <p class="form-hint">หากต้องการนำเข้าจาก URL กรุณาดาวน์โหลดไฟล์แล้วอัพโหลดผ่านฟอร์มด้านบนแทน</p>
+          </div>
+        </div>
+
+        <!-- Chunk list as cards -->
+        <div class="card" data-auth-required>
+          <div class="card-header">
+            <h3>รายการชิ้นข้อมูลทั้งหมด (<span id="chunkTotal">0</span>)</h3>
+          </div>
+          <div class="card-body">
+            <div id="chunkList" class="loading">กำลังโหลดรายการ...</div>
+          </div>
+        </div>
+      </main>
     </div>
-  </main>
+  </div>
 
   <script src="../assets/js/app.js"></script>
   <script>
@@ -72,6 +128,16 @@
       const form = document.getElementById('addChunkForm');
       const statusEl = document.getElementById('knowledgeStatus');
 
+      function statusBadgeClass(documentStatus) {
+        switch (documentStatus) {
+          case 'published': return 'ready';
+          case 'processing': return 'processing';
+          case 'failed': return 'failed';
+          case 'review': return 'review';
+          default: return 'pending';
+        }
+      }
+
       async function loadChunks() {
         listEl.innerHTML = '<div class="loading">กำลังโหลดรายการชิ้นข้อมูล...</div>';
         try {
@@ -80,25 +146,33 @@
             const chunks = res.data.chunks || [];
             totalEl.textContent = chunks.length;
             if (chunks.length === 0) {
-              listEl.innerHTML = '<div class="empty">ยังไม่มีชิ้นข้อมูลในฐานความรู้</div>';
+              listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><h3>ยังไม่มีชิ้นข้อมูลในฐานความรู้</h3><p>เริ่มต้นโดยอัพโหลดไฟล์หรือใส่เนื้อหาข้อความด้านบน</p></div>';
               return;
             }
-            let html = '<table><thead><tr><th>รหัส</th><th>ชื่อ/ที่มา</th><th>ประเภท</th><th>อัพโหลดเมื่อ</th><th style="width:120px;">การดำเนินการ</th></tr></thead><tbody>';
+            let html = '<div class="knowledge-list">';
             chunks.forEach((c) => {
-              html += '<tr>' +
-                '<td><code>' + window.AdminApp.escapeHtml(c.id) + '</code></td>' +
-                '<td>' + window.AdminApp.escapeHtml(c.title || '-') + '</td>' +
-                '<td><span class="status-badge ' + (c.documentStatus === 'published' ? 'status-active' : 'status-inactive') + '">' + window.AdminApp.escapeHtml(c.documentStatus || '-') + '</span></td>' +
-                '<td>' + window.AdminApp.escapeHtml((c.uploadedAt || '').slice(0, 16)) + '</td>' +
-                '<td class="actions">' +
+              const badge = statusBadgeClass(c.documentStatus);
+              const fileInfo = c.originalFile ? '<div class="item-file">📎 ' + window.AdminApp.escapeHtml(c.originalFile) + '</div>' : '';
+              const linkInfo = c.sourceUrl ? '<div class="item-file" style="color:var(--brand-blue);">🔗 ' + window.AdminApp.escapeHtml(c.sourceUrl) + '</div>' : '';
+              const time = (c.uploadedAt || '').slice(0, 16);
+              html += '<div class="knowledge-item">' +
+                '<div class="item-icon">📄</div>' +
+                '<div class="item-content">' +
+                  '<div class="item-title">' + window.AdminApp.escapeHtml(c.title || '-') + '</div>' +
+                  fileInfo + linkInfo +
+                  '<div class="item-meta">' +
+                    '<span class="status-badge ' + badge + '">' + window.AdminApp.escapeHtml(c.documentStatus || '-') + '</span>' +
+                    (time ? '<span>' + window.AdminApp.escapeHtml(time) + '</span>' : '') +
+                  '</div>' +
+                '</div>' +
+                '<div class="item-actions">' +
                   '<button class="btn btn-danger btn-sm" data-action="delete-chunk" data-id="' + window.AdminApp.escapeHtml(c.id) + '" title="ลบชิ้นข้อมูลนี้">ลบ</button>' +
-                '</td>' +
-              '</tr>';
+                '</div>' +
+              '</div>';
             });
-            html += '</tbody></table>';
+            html += '</div>';
             listEl.innerHTML = html;
 
-            // ปุ่มลบ
             listEl.querySelectorAll('[data-action="delete-chunk"]').forEach((btn) => {
               btn.addEventListener('click', async () => {
                 const id = btn.getAttribute('data-id');
@@ -128,17 +202,45 @@
 
         const title = document.getElementById('chunkTitle').value.trim();
         const content = document.getElementById('chunkContent').value.trim();
+        const link = document.getElementById('chunkLink').value.trim();
+        const fileInput = document.getElementById('chunkFile');
+        const file = fileInput.files[0];
+
+        if (!content && !file && !link) {
+          window.AdminApp.showStatus('knowledgeStatus', 'กรุณาระบุเนื้อหา เลือกไฟล์ หรือใส่ลิงก์อย่างน้อยหนึ่งอย่าง', 'error');
+          btn.disabled = false;
+          btn.textContent = 'เพิ่มชิ้นข้อมูล';
+          return;
+        }
 
         try {
-          const res = await window.AdminApp.apiRequest('/knowledge/chunks', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content }),
-          });
-          if (res && res.ok) {
-            window.AdminApp.showStatus('knowledgeStatus', res.data.message || 'เพิ่มชิ้นข้อมูลสำเร็จ', 'success');
-            form.reset();
-            loadChunks();
+          if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            if (title) formData.append('title', title);
+            if (link) formData.append('sourceUrl', link);
+
+            const res = await window.AdminApp.apiRequest('/knowledge/upload', {
+              method: 'POST',
+              body: formData,
+            });
+            if (res && res.ok) {
+              window.AdminApp.showStatus('knowledgeStatus', res.data.message || 'อัพโหลดไฟล์สำเร็จ', 'success');
+              form.reset();
+              fileInput.value = '';
+              loadChunks();
+            }
+          } else {
+            const res = await window.AdminApp.apiRequest('/knowledge/chunks', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ title, content, sourceUrl: link || undefined }),
+            });
+            if (res && res.ok) {
+              window.AdminApp.showStatus('knowledgeStatus', res.data.message || 'เพิ่มชิ้นข้อมูลสำเร็จ', 'success');
+              form.reset();
+              loadChunks();
+            }
           }
         } catch (err) {
           window.AdminApp.showStatus('knowledgeStatus', err.message || 'เพิ่มชิ้นข้อมูลไม่สำเร็จ', 'error');

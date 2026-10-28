@@ -25,7 +25,7 @@
           <label for="password">รหัสผ่าน</label>
           <input type="password" id="password" name="password" placeholder="ใส่รหัสผ่าน" required autocomplete="current-password">
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100;" id="loginBtn">เข้าสู่ระบบ</button>
+        <button type="submit" class="btn btn-primary" style="width:100%;background:var(--brand-rose);border-color:var(--brand-rose);color:#ffffff;" id="loginBtn">เข้าสู่ระบบ</button>
       </form>
 
       <div class="login-footer">
@@ -55,10 +55,10 @@
 
         try {
           await window.AdminApp.login(username, password);
-          showStatus('loginStatus', 'ล็อกอินสำเร็จ กำลังนำไปยังหน้าแดชบอร์ด...', 'success');
+          window.AdminApp.showStatus('loginStatus', 'ล็อกอินสำเร็จ กำลังนำไปยังหน้าแดชบอร์ด...', 'success');
           setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
         } catch (err) {
-          showStatus('loginStatus', err.message || 'ล็อกอินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+          window.AdminApp.showStatus('loginStatus', err.message || 'ล็อกอินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
         } finally {
           btn.disabled = false;
           btn.textContent = 'เข้าสู่ระบบ';

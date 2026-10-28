@@ -7,107 +7,164 @@
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <span>🛡️</span> OPDC Chatbot Admin
-    </div>
-    <div class="user-info">
-      <span id="nav-user" style="display:none;"></span>
-      <span id="nav-role" class="badge-role" style="display:none;"></span>
-      <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;">ออกจากระบบ</button>
-    </div>
-  </header>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <span>🛡️</span> OPDC Chatbot Admin
+      </div>
+      <div class="user-info">
+        <span id="nav-user" style="display:none;"></span>
+        <span id="nav-role" class="badge-role" style="display:none;"></span>
+        <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;" data-action="logout">ออกจากระบบ</button>
+      </div>
+    </header>
 
-  <nav class="app-nav">
-    <a href="dashboard.html" data-auth-required>แดชบอร์ด</a>
-    <a href="knowledge.html" data-auth-required>จัดการความรู้</a>
-    <a href="intents.html" data-auth-required>จัดการ Intent</a>
-    <a href="prompts.html" data-auth-required>ตั้งค่า Prompt</a>
-    <a href="conversations.html" data-auth-required>ประวัติการสนทนา</a>
-    <a href="system.html" data-auth-required>ระบบและรายงาน</a>
-    <a href="login.html" id="nav-login-btn">เข้าสู่ระบบ</a>
-  </nav>
-
-  <main class="app-main">
-    <div id="authStatus" class="status"></div>
-
-    <h1 class="page-title" data-auth-required>แดชบอร์ดระบบหลังบ้าน</h1>
-    <p class="page-subtitle" data-auth-required>ภาพรวมสถิติและสถานะของระบบ Chatbot ก.พ.ร.</p>
-
-    <div class="stats-grid" data-auth-required>
-      <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div>
-          <div class="stat-value" id="statUsers">-</div>
-          <div class="stat-label">ผู้ดูแลระบบ</div>
+    <div class="app-body">
+      <nav class="app-nav">
+        <div class="nav-brand">
+          <span>🛡️</span> OPDC Chatbot Admin
         </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">💬</div>
-        <div>
-          <div class="stat-value" id="statConversations">-</div>
-          <div class="stat-label">ประวัติการสนทนา</div>
+        <a href="dashboard.html" data-auth-required class="active">ภาพรวม</a>
+        <a href="knowledge.html" data-auth-required>จัดการฐานความรู้</a>
+        <a href="intents.html" data-auth-required>จัดการ Intent</a>
+        <a href="prompts.html" data-auth-required>ตั้งค่า Prompt</a>
+        <a href="conversations.html" data-auth-required>ประวัติการสนทนา</a>
+        <a href="system.html" data-auth-required>ระบบและรายงาน</a>
+        <a href="login.html" id="nav-login-btn">เข้าสู่ระบบ</a>
+        <div class="nav-quick">
+          <div>ทางลัด</div>
+          <a href="knowledge.html" class="btn btn-success btn-sm" style="width:100%;justify-content:center;">อัปโหลดเอกสาร</a>
+          <a href="knowledge.html" class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;margin-top:8px;">เพิ่มข้อความ</a>
         </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">📋</div>
-        <div>
-          <div class="stat-value" id="statAuditLogs">-</div>
-          <div class="stat-label">บันทึกการดำเนินการ</div>
+      </nav>
+
+      <main class="app-main">
+        <div id="authStatus" class="status"></div>
+
+        <div class="page-header" data-auth-required>
+          <div class="greeting">
+            <div class="hello">สวัสดี, ผู้ดูแลระบบ</div>
+            <div class="name" id="dashboardUserName">—</div>
+          </div>
+          <nav class="pill-nav" aria-label="นำทางหลัก">
+            <a href="dashboard.html" class="active">ภาพรวม</a>
+            <a href="knowledge.html">ฐานความรู้</a>
+            <a href="conversations.html">แหล่งข้อมูล</a>
+            <a href="system.html">กิจกรรม</a>
+          </nav>
+          <div class="actions">
+            <button class="btn btn-success" id="btnAddKnowledge">+ เพิ่มข้อมูลให้แชตบอต</button>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="card" data-auth-required>
-      <div class="card-header">
-        <h3>ข้อมูลบัญชีผู้ใช้</h3>
-      </div>
-      <div class="card-body">
-        <p id="userInfo" style="color:#6b7280;">กำลังโหลดข้อมูล...</p>
-      </div>
-    </div>
+        <!-- Summary cards: metrics read from the real API where available -->
+        <div class="summary-grid" data-auth-required>
+          <div class="summary-card ready" data-auth-required>
+            <div class="stat-icon">📚</div>
+            <div>
+              <span class="stat-value" id="statChunks">—</span>
+              <span class="stat-label">ชิ้นข้อมูลในฐานความรู้</span>
+              <span class="stat-sub">พร้อมให้แชตบอตอ้างอิง</span>
+            </div>
+          </div>
+          <div class="summary-card pending" data-auth-required>
+            <div class="stat-icon">⏳</div>
+            <div>
+              <span class="stat-value unavailable" id="statPending">—</span>
+              <span class="stat-label">เอกสารรอประมวลผล</span>
+              <span class="stat-sub">ยังไม่มีระบบติดตามสถานะประมวลผล</span>
+            </div>
+          </div>
+          <div class="summary-card attention" data-auth-required>
+            <div class="stat-icon">⚠️</div>
+            <div>
+              <span class="stat-value unavailable" id="statAttention">—</span>
+              <span class="stat-label">รายการต้องตรวจสอบ</span>
+              <span class="stat-sub">ยังไม่มีระบบแจ้งเตือนข้อผิดพลาด</span>
+            </div>
+          </div>
+        </div>
 
-    <div class="card" data-auth-required>
-      <div class="card-header">
-        <h3>การเข้าถึงตามบทบาท</h3>
-      </div>
-      <div class="card-body">
-        <ul style="list-style:none; padding:0;">
-          <li style="margin-bottom:8px;"><strong>แอดมิน (admin):</strong> เข้าถึงทุกฟีเจอร์ รวมถึงการลบข้อมูลและตั้งค่าระบบ</li>
-          <li style="margin-bottom:8px;"><strong>บรรณาธิการ (editor):</strong> จัดการความรู้และ Intent ได้ แต่ไม่สามารถลบผู้ใช้หรือตั้งค่าระบบ</li>
-          <li><strong>ผู้ดู (viewer):</strong> ดูข้อมูลและรายงานได้เท่านั้น ไม่สามารถแก้ไขข้อมูล</li>
-        </ul>
-      </div>
+        <!-- Lower dashboard: analytics + recent activity -->
+        <div class="analytics-grid" data-auth-required>
+          <div class="activity-chart">
+            <h2>📈 กิจกรรมฐานความรู้</h2>
+            <p>สรุปการเพิ่มและประมวลผลข้อมูลในช่วงเวลาที่เลือก</p>
+            <div class="chart-placeholder">
+              <span>📊</span>
+              <p style="margin-top:10px;">ยังไม่มีข้อมูลกิจกรรมเรียลไทม์ให้แสดง</p>
+              <p style="font-size:0.78rem;margin-top:6px;">ระบบจะแสดงสถิติเมื่อมีการนำเข้าหรือประมวลผลเอกสาร</p>
+            </div>
+          </div>
+          <div class="recent-activity">
+            <h2>🕒 กิจกรรมล่าสุด</h2>
+            <p>บันทึกการดำเนินการล่าสุดในระบบแอดมิน</p>
+            <div id="recentActivity" class="loading">กำลังโหลดกิจกรรมล่าสุด...</div>
+          </div>
+        </div>
+      </main>
     </div>
-  </main>
+  </div>
 
   <script src="../assets/js/app.js"></script>
   <script>
     (function () {
-      const userInfoEl = document.getElementById('userInfo');
+      const btnAddKnowledge = document.getElementById('btnAddKnowledge');
+      const recentActivityEl = document.getElementById('recentActivity');
 
       async function loadStats() {
         try {
-          const res = await window.AdminApp.apiRequest('/dashboard/stats');
+          const res = await window.AdminApp.apiRequest('/knowledge/chunks');
           if (res && res.ok) {
-            const s = res.data.stats;
-            document.getElementById('statUsers').textContent = s.users;
-            document.getElementById('statConversations').textContent = s.conversations;
-            document.getElementById('statAuditLogs').textContent = s.auditLogs;
+            const chunks = res.data.chunks || [];
+            document.getElementById('statChunks').textContent = chunks.length;
           }
         } catch (err) {
-          window.AdminApp.showStatus('authStatus', 'โหลดสถิติไม่สำเร็จ: ' + err.message, 'error');
+          document.getElementById('statChunks').textContent = '—';
         }
-
         if (window.AdminApp.currentUser()) {
           const u = window.AdminApp.currentUser();
-          userInfoEl.innerHTML =
-            '<strong>ชื่อผู้ใช้:</strong> ' + window.AdminApp.escapeHtml(u.username) +
-            ' &nbsp;|&nbsp; <strong>บทบาท:</strong> ' + window.AdminApp.escapeHtml(u.role);
+          document.getElementById('dashboardUserName').textContent = u.username;
         }
       }
 
+      async function loadRecentActivity() {
+        try {
+          const res = await window.AdminApp.apiRequest('/system/audit-logs?limit=8');
+          if (res && res.ok) {
+            const logs = res.data.logs || [];
+            if (logs.length === 0) {
+              recentActivityEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><h3 style="margin:0 0 6px 0;">ยังไม่มีกิจกรรม</h3><p style="margin:0;">ยังไม่มีบันทึกการดำเนินการล่าสุด</p></div>';
+              return;
+            }
+            let html = '<div class="activity-list">';
+            logs.forEach((log) => {
+              const time = new Date(log.created_at).toLocaleString('th-TH', {
+                day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+              });
+              const actor = log.username ? log.username : 'ระบบ';
+              html += '<div class="activity-item">' +
+                '<div class="activity-time">' + window.AdminApp.escapeHtml(time) + '</div>' +
+                '<div class="activity-label">' + window.AdminApp.escapeHtml(log.action || 'กิจกรรมระบบ') + '</div>' +
+                (log.details ? '<div class="activity-doc">' + window.AdminApp.escapeHtml(actor + ' — ' + log.details) + '</div>' : '') +
+                '</div>';
+            });
+            html += '</div>';
+            recentActivityEl.innerHTML = html;
+          }
+        } catch (err) {
+          recentActivityEl.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><h3 style="margin:0 0 6px 0;">โหลดกิจกรรมไม่สำเร็จ</h3><p style="margin:0;">' + window.AdminApp.escapeHtml(err.message) + '</p></div>';
+        }
+      }
+
+      if (btnAddKnowledge) {
+        btnAddKnowledge.addEventListener('click', () => {
+          window.location.href = 'knowledge.html';
+        });
+      }
+
       loadStats();
+      loadRecentActivity();
     })();
   </script>
 </body>

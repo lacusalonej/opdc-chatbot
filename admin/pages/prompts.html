@@ -14,12 +14,13 @@
     <div class="user-info">
       <span id="nav-user" style="display:none;"></span>
       <span id="nav-role" class="badge-role" style="display:none;"></span>
-      <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;">ออกจากระบบ</button>
+      <button id="nav-logout-btn" class="btn btn-danger btn-sm" style="display:none;" data-action="logout">ออกจากระบบ</button>
     </div>
   </header>
 
-  <nav class="app-nav">
-    <a href="dashboard.html" data-auth-required>แดชบอร์ด</a>
+  <div class="app-body">
+    <nav class="app-nav">
+    <a href="dashboard.html" data-auth-required>ภาพรวม</a>
     <a href="knowledge.html" data-auth-required>จัดการความรู้</a>
     <a href="intents.html" data-auth-required>จัดการ Intent</a>
     <a href="prompts.html" data-auth-required class="active">ตั้งค่า Prompt</a>
@@ -31,8 +32,19 @@
   <main class="app-main">
     <div id="promptStatus" class="status"></div>
 
-    <h1 class="page-title" data-auth-required>การกำหนดเวอร์ชัน Prompt</h1>
-    <p class="page-subtitle" data-auth-required>ดูและอัปเดตเวอร์ชันของเทมเพลต Prompt ที่ใช้สร้างคำตอบของ Chatbot</p>
+    <div class="page-header" data-auth-required>
+      <div class="greeting">
+        <div class="hello">การกำหนดเวอร์ชัน Prompt</div>
+        <div class="name">ดูและอัปเดตเทมเพลต Prompt ที่ใช้สร้างคำตอบของ Chatbot</div>
+      </div>
+      <nav class="pill-nav" aria-label="นำทางหลัก">
+        <a href="dashboard.html">ภาพรวม</a>
+        <a href="knowledge.html">ฐานความรู้</a>
+        <a href="conversations.html">แหล่งข้อมูล</a>
+        <a href="system.html">กิจกรรม</a>
+      </nav>
+      <div class="actions"></div>
+    </div>
 
     <div class="card" data-auth-required>
       <div class="card-header">
@@ -63,6 +75,7 @@
       </div>
     </div>
   </main>
+  </div>
 
   <script src="../assets/js/app.js"></script>
   <script>

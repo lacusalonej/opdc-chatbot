@@ -36,3 +36,4 @@ backend/uploads/
 backend/cookies.txt
 backend/cookies_invalid.txt
 backend/database/
+backend/test_manual_verify.js
