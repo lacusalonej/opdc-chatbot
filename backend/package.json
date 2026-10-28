@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "node test.js",
-    "test:watch": "node --watch test.js"
+    "test:watch": "node --watch test.js",
+    "postinstall": "npm rebuild sqlite3 --build-from-source"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
