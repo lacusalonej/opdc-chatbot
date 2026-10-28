@@ -31,3 +31,8 @@ opdc-chatbot/
 # ข้อมูลที่อัพโหลดโดยผู้ใช้งานและฐานความรู้เพิ่มเติม (สร้างขณะรันระบบ)
 knowledge/uploaded-knowledge.json
 backend/uploads/
+
+# ไฟล์โทเค็นเซสชันและฐานข้อมูลรันไทม์จากการทดสอบด้วยมือ (ห้าม commit ลง Git)
+backend/cookies.txt
+backend/cookies_invalid.txt
+backend/database/
