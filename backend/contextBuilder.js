@@ -175,6 +175,7 @@ function buildContext(retrievedDocuments, options = {}) {
 
   const documents = [];
   const skipped = [];
+  let hasOutdated = false;
 
   for (let i = 0; i < retrievedDocuments.length; i++) {
     const doc = retrievedDocuments[i];
@@ -218,6 +219,7 @@ function buildContext(retrievedDocuments, options = {}) {
 
     // ตรวจสอบล้าสมัย
     if (opts.filterOutdated && isOutdated(normalizedDoc)) {
+      hasOutdated = true;
       if (!opts.preserveSuperseded) {
         skipped.push({ reason: 'outdated', doc: normalizedDoc });
         continue;
@@ -262,7 +264,7 @@ function buildContext(retrievedDocuments, options = {}) {
     citations,
     hasEvidence: evidenceParts.length > 0,
     hasConflicts: hasConflictingDocuments(limitedDocs),
-    hasOutdated: limitedDocs.some(isOutdated),
+    hasOutdated: hasOutdated || limitedDocs.some(isOutdated),
     skipped
   };
 }

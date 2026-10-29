@@ -282,8 +282,7 @@ function processPrompt(input) {
 
   // === ขั้นตอนที่ 5: ตรวจสอบสถานะข้อมูล ===
   const insufficientEvidence = !contextResult.hasEvidence &&
-    !GREETING_INTENTS.includes(intent) &&
-    !OUT_OF_SCOPE_INTENTS.includes(intent);
+    !GREETING_INTENTS.includes(intent);
 
   // เพิ่มคำเตือนเมื่อมีข้อมูลขัดแย้งหรือล้าสมัย
   if (contextResult.hasConflicts) {

@@ -103,12 +103,6 @@ function validateSingleCitation(citation, documentMap) {
   if (citation.title) {
     if (!isNonEmptyString(citation.title)) {
       issues.push('Citation title is empty or invalid');
-    } else {
-      // ตรวจสอบว่า title มีอยู่ในเอกสารที่ค้นหาหรือไม่
-      const titleKey = citation.title.toLowerCase();
-      if (!documentMap.has(titleKey) && documentMap.size > 0) {
-        issues.push(`Citation title "${citation.title}" not found in retrieved documents`);
-      }
     }
   }
 
@@ -180,6 +174,15 @@ function validateCitations(citations, retrievedDocuments) {
     const citation = citations[i];
     const result = validateSingleCitation(citation, documentMap);
 
+    // ตรวจสอบเพิ่มเติม: title ต้องมีอยู่ใน retrieved documents (เมื่อมีเอกสารให้เปรียบเทียบ)
+    if (result.valid && citation.title && documentMap.size > 0) {
+      const titleKey = citation.title.toLowerCase();
+      if (!documentMap.has(titleKey)) {
+        result.valid = false;
+        result.issues.push(`Citation title "${citation.title}" not found in retrieved documents`);
+      }
+    }
+
     if (result.valid) {
       validCitations.push(citation);
       validCount++;
@@ -214,9 +217,9 @@ function checkCitationRequirements(response) {
   };
 
   // หาก answer มีข้อมูลเชิง factual แต่ไม่มี citations
-  if (response.answer && !response.citations) {
+  if (response.answer && (!response.citations || response.citations.length === 0)) {
     // ตรวจสอบว่ามีคำว่า "เราได้..." หรือ "จากแหล่งข้อมูล" อยู่ใน answer
-    const hasFactualClaim = /เราได้|จากแหล่งข้อมูล|ตามที่|อ้างอิง|สัปดาห์|เอกสาร|แหลลงข้อมูล/i.test(response.answer);
+    const hasFactualClaim = /เราได้(?![ก-๙])|ตามที่|อ้างอิง|สัปดาห์|เอกสาร|แหลลงข้อมูล/i.test(response.answer);
     if (hasFactualClaim) {
       result.missingCitations = true;
       result.hasRequiredCitations = false;

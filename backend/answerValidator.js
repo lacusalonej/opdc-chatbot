@@ -96,14 +96,16 @@ function detectPotentialFabrication(answer) {
  */
 function hasUnverifiedSourceReferences(answer, citations) {
   if (!isNonEmptyAnswer(answer)) return false;
-  if (!citations || citations.length === 0) return false;
 
   // ตรวจสอบว่ามี URL ใน answer ที่ไม่อยู่ใน citations
   const urlPattern = /https?:\/\/[^\s<>"{}|\\^`[\]]+/gi;
   const answerUrls = answer.match(urlPattern) || [];
+
+  if (answerUrls.length === 0) return false;
+
   const citationUrls = citations
-    .filter(c => c && c.url)
-    .map(c => c.url);
+    ? citations.filter(c => c && c.url).map(c => c.url)
+    : [];
 
   for (const url of answerUrls) {
     if (!citationUrls.includes(url)) {

@@ -92,7 +92,7 @@ const INTENT_KEYWORDS = {
   ],
 
   DOCUMENT_SEARCH: [
-    'ค้นหา', 'search', 'หา', 'มีบริการ', 'มีเอกสาร', 'มีข้อมูล',
+    'ค้นหา', 'search', 'หา', 'ค้นหาเอกสาร', 'มีเอกสาร', 'มีข้อมูล',
     'มีอะไร', 'สอบถาม', 'สืบค้น', 'lookup', 'find',
     'มีอยู่ไหม', 'มีไหม', 'อยู่ที่ไหน'
   ],
@@ -106,7 +106,7 @@ const INTENT_KEYWORDS = {
 
   DIGITAL_GOVERNMENT: [
     'ดิจิทัล', 'digital', 'อิเล็กทรอนิกส์', 'อีเมล',
-    'online', 'ออนไลน์', 'ระบบอิเล็กทรอนิกส์', 'digital government',
+    'online', 'ออนไลน์', 'ระบบดิจิทัล', 'ระบบอิเล็กทรอนิกส์', 'digital government',
     'gov digital', 'thailand digital', 'ดิจิทัลการปกครอง'
   ],
 
@@ -214,13 +214,13 @@ function classifyIntent(userMessage, conversationHistory, detectedLanguage = 'th
   }
 
   // หากมีคะแนนสูงพอถือได้ว่ามี match
-  if (maxScore >= 5) {
+  if (maxScore >= 4) {
     return bestIntent;
   }
 
   // ตรวจสอบ OUT_OF_SCOPE
   const outOfScopeScore = scoreIntent(query, INTENT_KEYWORDS.OUT_OF_SCOPE || []);
-  if (outOfScopeScore >= 5) {
+  if (outOfScopeScore >= 4) {
     return 'OUT_OF_SCOPE';
   }
 

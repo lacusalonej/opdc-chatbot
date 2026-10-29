@@ -27,9 +27,20 @@ class RAGEngine {
     _createChunks() {
         const chunks = [];
         const org = this.data.organization;
-        const baseUrl = 'https://www.opdc.go.th';
+        const baseUrl = 'https://www.opdc.go.th/';
 
         // เพิ่ม metadata ให้ chunks เพื่อรองรับ citations
+        chunks.push({
+            id: 'knowledge_center',
+            category: 'search',
+            keywords: ['ศูนย์ความรู้', 'ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ระเบียบ', 'กฎหมาย', 'คำวินิจฉัย', 'รายงาน'],
+            title: 'ศูนย์ความรู้ ก.พ.ร.',
+            sourceUrl: baseUrl,
+            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            documentStatus: 'published',
+            content: `ศูนย์ความรู้ ก.พ.ร. ให้บริการ:\n- กฎหมายและคำวินิจฉัย\n- เอกสารเผยแพร่และรายงานผลการปฏิบัติราชการ\n- ข้อมูล B-READY, PMQA, OGP\nสามารถสืบค้นได้ที่เว็บไซต์หลัก https://www.opdc.go.th/`
+        });
+
         chunks.push({
             id: 'org_name',
             category: 'general',
@@ -49,7 +60,7 @@ class RAGEngine {
             sourceUrl: `${baseUrl}/contact`,
             publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
             documentStatus: 'published',
-            content: `ช่องทางการติดต่อ ก.พ.ร. (OPDC):\n- ที่อยู่: ${org.address}\n- เบอร์โทรศัพท์: ${org.phone}\n- โทรสาร (Fax): ${org.fax}\n- อีเมล: ${org.email}\n- Facebook: ${org.facebook}\n- YouTube: ${org.youtube}`
+            content: `ช่องทางการติดต่อ ก.พ.ร. (OPDC):\n- ที่อยู่: ${org.address}\n- เบอร์โทรศัพท์: ${org.phone}\n- โทรสาร (Fax): ${org.fax}\n- อีเมล: ${org.email}\n- Facebook: OPDCThailand\n- YouTube: OPDCThailand`
         });
 
         chunks.push({
@@ -112,17 +123,6 @@ class RAGEngine {
                 content: `${service.name_th}: ${service.desc_th}`
             });
         }
-
-        chunks.push({
-            id: 'knowledge_center',
-            category: 'search',
-            keywords: ['ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ระเบียบ', 'กฎหมาย', 'คำวินิจฉัย', 'รายงาน'],
-            title: 'ศูนย์ความรู้ ก.พ.ร.',
-            sourceUrl: baseUrl,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
-            documentStatus: 'published',
-            content: `ศูนย์ความรู้ ก.พ.ร. ให้บริการ:\n- กฎหมายและคำวินิจฉัย\n- เอกสารเผยแพร่และรายงานผลการปฏิบัติราชการ\n- ข้อมูล B-READY, PMQA, OGP\nสามารถสืบค้นได้ที่เว็บไซต์หลัก https://www.opdc.go.th/`
-        });
 
         chunks.push({
             id: 'greeting',

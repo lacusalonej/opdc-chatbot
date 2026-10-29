@@ -1,0 +1,3 @@
+@echo off
+echo กำลังเปิดหน้าเข้าสู่ระบบแอดมิน...
+start "" "http://localhost:8001/admin/pages/login.html"

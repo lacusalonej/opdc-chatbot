@@ -9,6 +9,8 @@
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const RedisStore = require('connect-redis').default;
+const { createClient } = require('redis');
 const crypto = require('crypto');
 const path = require('path');
 const RAGEngine = require('./rag');
@@ -30,12 +32,25 @@ const adminSystemRoutes = require('./routes/admin/system');
 const app = express();
 const PORT = process.env.PORT || 8001;
 
+// ปิดการเปิดเผย X-Powered-By header (security)
+app.disable('x-powered-by');
+
 // ตรวจสอบ secret สำหรับเข้ารหัสเซสชัน (ห้ามใช้ค่า default ที่ hardcode ไว้ใน production)
 const sessionSecret = process.env.ADMIN_SESSION_SECRET
     || (process.env.NODE_ENV === 'production' ? undefined : crypto.randomBytes(32).toString('hex'));
 if (!sessionSecret) {
     console.error('[FATAL] ADMIN_SESSION_SECRET ต้องถูกตั้งค่าในตัวแปรสภาพแวดล้อมเมื่อรันใน production');
     process.exit(1);
+}
+
+// ระบบเก็บ session: ใช้ Redis ใน production (เมื่อมี REDIS_URL) / MemoryStore ใน development
+let sessionStore = undefined;
+if (process.env.REDIS_URL) {
+    const redisClient = createClient({ url: process.env.REDIS_URL });
+    redisClient.connect().catch((err) => {
+        console.error('[Redis] เชื่อมต่อไม่สำเร็จ:', err.message);
+    });
+    sessionStore = new RedisStore({ client: redisClient });
 }
 
 // Middleware
@@ -57,6 +72,7 @@ app.use(cors({
 app.use(express.json());
 app.use(session({
     name: 'session_id',
+    store: sessionStore,
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
@@ -68,12 +84,23 @@ app.use(session({
     },
 }));
 
+// ปิดเส้นทางภายในก่อน static middleware เพื่อไม่ให้ static จับก่อน
+app.get('/admin', (_, res) => {
+    res.status(403).json({ error: 'Forbidden: admin access required' });
+});
+
 // เสิร์ฟ static files (หน้าแชทและหน้าแอดมิน) จากโฟลเดอร์ parent
 app.use(express.static(path.join(__dirname, '..')));
 
-// Root route -> เสิร์ฟหน้าแชท
+// Root route -> คืนข้อมูลบริการเป็น JSON
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'chat-test.html'));
+    res.json({
+        name: 'OPDC Chatbot Backend',
+        version: '1.0.0',
+        service: 'chatbot-api',
+        status: 'ok',
+        endpoints: ['/v1/chat', '/v1/intents', '/v1/sources', '/health']
+    });
 });
 
 // ตั้งค่า RAG engine
@@ -142,7 +169,10 @@ app.post('/v1/chat', async (req, res) => {
     try {
         const { message, session_id } = req.body;
 
-        if (!message || !message.trim()) {
+        if (typeof message !== 'string') {
+            return res.status(400).json({ error: 'message must be a string' });
+        }
+        if (!message.trim()) {
             return res.status(400).json({ error: 'message is required' });
         }
 
@@ -201,11 +231,6 @@ app.delete('/v1/session/:id', (req, res) => {
     return res.json({ status: 'not_found', session_id: id });
 });
 
-// เสิร์ฟหน้าแอดมินอัพโหลดไฟล์ (เดิม)
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'admin', 'index.html'));
-});
-
 // ระบบอัพโหลดไฟล์และจัดการฐานความรู้ (แอดมินเดิม)
 app.use('/v1/admin', createAdminRoutes(engine, km));
 
@@ -221,7 +246,9 @@ app.use('/api/admin/v1/system', adminSystemRoutes);
 // Error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ error: 'Internal server error' });
+    // Body parser และ errors อื่น ๆ อาจมี status code ที่เฉพาะเจาะจง
+    const status = err.status || err.statusCode || 500;
+    res.status(status).json({ error: status === 500 ? 'Internal server error' : err.message || 'Error' });
 });
 
 // Start server (หลังจากฐานข้อมูลพร้อมแล้ว)
