@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OPDC Chatbot — ระบบแชทบอท ก.พ.ร.</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Sarabun', 'Noto Sans Thai', sans-serif; background: #f5f7fa; color: #1f2937; line-height: 1.6; }
+    .container { max-width: 800px; margin: 40px auto; padding: 20px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    header { text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #e5e7eb; }
+    header h1 { color: #0f62fe; font-size: 2rem; margin-bottom: 8px; }
+    header p { color: #6b7280; font-size: 1rem; }
+    .badge { display: inline-block; margin-top: 12px; padding: 6px 14px; background: #e7f3ff; color: #0f62fe; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid #bfdbfe; }
+    .section { margin: 32px 0; }
+    .section h2 { font-size: 1.25rem; color: #111827; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e5e7eb; }
+    .section p { margin-bottom: 12px; color: #4b5563; }
+    ul.list { list-style: disc inside; color: #4b5563; }
+    ul.list li { margin-bottom: 8px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 16px; }
+    .feature-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+    .feature-card h3 { font-size: 1rem; color: #111827; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.875rem; color: #6b7280; margin: 0; }
+    .start-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin-top: 24px; }
+    .start-box h3 { color: #0f62fe; font-size: 1.1rem; margin-bottom: 12px; }
+    .start-box code { background: #ffffff; border: 1px solid #d1d5db; border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 0.85rem; color: #111827; }
+    footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid #e5e7eb; text-align: center; color: #9ca3af; font-size: 0.85rem; }
+    a { color: #0f62fe; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🤖 OPDC Chatbot</h1>
+      <p>ระบบแชทบอทสำหรับสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.)</p>
+      <span class="badge">Rule-based · ไม่พึ่ง LLM · สอดคล้อง PDPA</span>
+    </header>
+
+    <div class="section">
+      <h2>เกี่ยวกับระบบ</h2>
+      <p>OPDC Chatbot คือระบบแชทบอทแบบใช้กฎ (rule-based) ที่พัฒนาขึ้นเพื่อตอบคำถามจากประชาชนเกี่ยวกับภารกิจและบริการของสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.) โดยไม่ต้องพึ่งพาโมเดล AI หรือ LLM ภายนอก ทำให้มั่นใจในเรื่องความปลอดภัยของข้อมูลและสอดคล้องกับพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)</p>
+    </div>
+
+    <div class="section">
+      <h2>คุณสมบัติหลัก</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>ตอบคำถามแบบ keyword-based</h3>
+          <p>ค้นหาคำตอบจากฐานความรู้ที่จัดเก็บไว้ในไฟล์ JSON โดยใช้การจับคู่คำสำคัญ</p>
+        </div>
+        <div class="feature-card">
+          <h3>รองรับภาษาไทยเต็มรูปแบบ</h3>
+          <p>ออกแบบมาให้รองรับภาษาไทยเป็นหลัก ใช้งานได้ง่ายสำหรับประชาชนทั่วไป</p>
+        </div>
+        <div class="feature-card">
+          <h3>เก็บข้อมูลใน RAM เท่านั้น</h3>
+          <p>ข้อมูลการสนทนาถูกจัดเก็บในหน่วยความจำเท่านั้น ลบเมื่อจบเซสชัน สอดคล้อง PDPA</p>
+        </div>
+        <div class="feature-card">
+          <h3>หน้าแชทใช้งานง่าย</h3>
+          <p>UI สีขาวสะอาด รองรับการแสดงผลบนมือถือและเดสก์ท็อป</p>
+        </div>
+        <div class="feature-card">
+          <h3>ระบบแอดมิน</h3>
+          <p>จัดการฐานความรู้ ผู้ใช้ สนทนา และการตั้งค่าระบบผ่านหน้าแอดมิน</p>
+        </div>
+        <div class="feature-card">
+          <h3>ทดสอบอัตโนมัติ</h3>
+          <p>มีชุดทดสอบครอบคลุมทั้งการจำแนก intent, RAG, คำตอบ และความปลอดภัย</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>วิธีเริ่มใช้งาน</h2>
+      <div class="start-box">
+        <h3>ขั้นตอนการติดตั้ง</h3>
+        <p>1. ติดตั้ง dependencies:<br><code>cd backend && npm install</code></p>
+        <p>2. เริ่มเซิร์ฟเวอร์:<br><code>node server.js</code></p>
+        <p>3. หรือใช้สคริปต์เริ่มต้น:<br><code>start-chatbot.bat</code> (Windows)</p>
+        <p>4. เปิดเบราว์เซอร์ที่: <code>http://localhost:8001</code></p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>API Endpoints หลัก</h2>
+      <ul class="list">
+        <li><b>GET /health</b> — ตรวจสอบสถานะเซิร์ฟเวอร์</li>
+        <li><b>GET /v1/intents</b> — รายการ intent ที่ระบบรองรับ</li>
+        <li><b>GET /v1/sources</b> — รายการแหล่งข้อมูลในฐานความรู้</li>
+        <li><b>POST /v1/chat</b> — ส่งคำถามและรับคำตอบจากแชทบอท</li>
+        <li><b>DELETE /v1/session/:id</b> — ลบข้อมูลเซสชัน (PDPA)</li>
+      </ul>
+      <p>ดูรายละเอียดเพิ่มเติมใน <a href="backend/CHAT_API.md" target="_blank">CHAT_API.md</a></p>
+    </div>
+
+    <div class="section">
+      <h2>เอกสารประกอบ</h2>
+      <ul class="list">
+        <li><a href="README.md" target="_blank">README.md</a> — คู่มือการใช้งานและพัฒนา</li>
+        <li><a href="backend/ADMIN_DOCS.md" target="_blank">ADMIN_DOCS.md</a> — เอกสารระบบแอดมิน (การตั้งค่า, Auth, CSRF, API, Backup, PDPA)</li>
+        <li><a href="backend/CHAT_API.md" target="_blank">CHAT_API.md</a> — รายละเอียด API endpoints สำหรับแชท</li>
+        <li><a href="PHASE-D-REPORT.md" target="_blank">PHASE-D-REPORT.md</a> — รายงานความคืบหน้าของโครงการ</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>พัฒนาสำหรับสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร. / OPDC) ประเทศไทย</p>
+      <p>&copy; 2026 OPDC Chatbot. ตอนอยู่ภใต้สัญญา MIT License</p>
+    </footer>
+  </div>
+</body>
+</html>
