@@ -273,7 +273,7 @@
       .then(function (data) {
         removeTyping(typing);
         if (data.session_id && !sessionId) sessionId = data.session_id;
-        addMessage(data.response || 'ขออภัยครับ ระบบเกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', 'bot');
+        addMessage(data.answer || data.response || 'ขออภัยครับ ระบบเกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', 'bot');
       })
       .catch(function (err) {
         removeTyping(typing);
