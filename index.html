@@ -107,8 +107,26 @@
 
     <footer>
       <p>พัฒนาสำหรับสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร. / OPDC) ประเทศไทย</p>
-      <p>&copy; 2026 OPDC Chatbot. ตอนอยู่ภใต้สัญญา MIT License</p>
+      <p>&copy; 2026 OPDC Chatbot. อยู่ภใต้สัญญา MIT License</p>
     </footer>
   </div>
+
+  <!-- OPDC Chat Widget — ช่องแชทลอยด้านขวาของจอ -->
+  <script src="frontend/chat-widget.js"></script>
+  <script>
+    OPDCChatbot.init({
+      endpoint: 'http://localhost:8001',
+      position: 'bottom-right',
+      title: 'OPDC Chatbot',
+      subtitle: 'ถามคำถามเกี่ยวกับ ก.พ.ร.',
+      welcomeMessage: 'สวัสดีครับ ยินดีให้บริการครับ มีอะไรให้ช่วยไหมครับ',
+      quickReplies: [
+        'ก.พ.ร. คืออะไร',
+        'วิธีการติดต่อเจ้าหน้าที่',
+        'ข้อมูลทั่วไปเกี่ยวกับ ก.พ.ร.',
+        'ค้นหาเอกสารและข่าวสาร'
+      ]
+    });
+  </script>
 </body>
 </html>

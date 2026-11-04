@@ -17,7 +17,7 @@ async function createUser({ username, password, role = 'admin' }) {
     const passwordHash = await hashPassword(password);
     const now = new Date().toISOString();
     const result = await run(
-        `INSERT INTO users (username, password_hash, role, is_active, created_at, updated_at) VALUES (?, ?, ?, 1, ?, ?)`,
+        "INSERT INTO users (username, password_hash, role, is_active, created_at, updated_at) VALUES (?, ?, ?, 1, ?, ?)",
         [username, passwordHash, role, now, now]
     );
     return getUserById(result.id);
@@ -25,27 +25,43 @@ async function createUser({ username, password, role = 'admin' }) {
 
 async function getUserById(id) {
     return get(
-        `SELECT id, username, role, is_active, created_at, updated_at, last_login_at FROM users WHERE id = ?`,
+        "SELECT id, username, role, is_active, created_at, updated_at, last_login_at FROM users WHERE id = ?",
         [id]
     );
 }
 
 async function getUserByUsername(username) {
     return get(
-        `SELECT id, username, password_hash, role, is_active, created_at, updated_at, last_login_at FROM users WHERE username = ?`,
+        "SELECT id, username, password_hash, role, is_active, created_at, updated_at, last_login_at FROM users WHERE username = ?",
         [username]
     );
 }
 
+async function getUserByGoogleId(googleId) {
+    return get(
+        "SELECT id, username, role, is_active, created_at, updated_at, last_login_at FROM users WHERE google_id = ?",
+        [googleId]
+    );
+}
+
+async function createUserByGoogleId({ googleId, username, email }) {
+    const now = new Date().toISOString();
+    const result = await run(
+        "INSERT INTO users (username, password_hash, google_id, role, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, ?)",
+        [username || email, 'GOOGLE_AUTH', googleId, 'admin', now, now]
+    );
+    return getUserById(result.id);
+}
+
 async function updateLastLogin(userId) {
     const now = new Date().toISOString();
-    await run(`UPDATE users SET last_login_at = ?, updated_at = ? WHERE id = ?`, [now, now, userId]);
+    await run("UPDATE users SET last_login_at = ?, updated_at = ? WHERE id = ?", [now, now, userId]);
     return getUserById(userId);
 }
 
 async function listUsers() {
     return all(
-        `SELECT id, username, role, is_active, created_at, updated_at, last_login_at FROM users ORDER BY created_at DESC`
+        "SELECT id, username, role, is_active, created_at, updated_at, last_login_at FROM users ORDER BY created_at DESC"
     );
 }
 
@@ -70,12 +86,12 @@ async function updateUser(userId, { role, is_active }) {
 }
 
 async function deleteUser(userId) {
-    const { changes } = await run(`DELETE FROM users WHERE id = ?`, [userId]);
+    const { changes } = await run("DELETE FROM users WHERE id = ?", [userId]);
     return changes > 0;
 }
 
 async function countUsers() {
-    const row = await get(`SELECT COUNT(*) AS cnt FROM users`);
+    const row = await get("SELECT COUNT(*) AS cnt FROM users");
     return row ? row.cnt : 0;
 }
 
@@ -83,6 +99,8 @@ module.exports = {
     createUser,
     getUserById,
     getUserByUsername,
+    getUserByGoogleId,
+    createUserByGoogleId,
     updateLastLogin,
     listUsers,
     updateUser,

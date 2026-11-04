@@ -40,18 +40,20 @@ function all(sql, params = []) {
 }
 
 async function initialize() {
-    await run(`PRAGMA journal_mode = WAL`);
+    await run("PRAGMA journal_mode = WAL");
 
     await run(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
         password_hash TEXT NOT NULL,
+        google_id TEXT UNIQUE,
         role TEXT NOT NULL DEFAULT 'admin',
         is_active INTEGER NOT NULL DEFAULT 1,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL,
         last_login_at TEXT
     )`);
+    try { await run("ALTER TABLE users ADD COLUMN google_id TEXT UNIQUE"); } catch (e) { /* column already exists */ }
 
     await run(`CREATE TABLE IF NOT EXISTS sessions (
         id TEXT PRIMARY KEY,
@@ -93,11 +95,11 @@ async function initialize() {
         created_at TEXT NOT NULL
     )`);
 
-    await run(`CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id)`);
-    await run(`CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at)`);
-    await run(`CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at)`);
-    await run(`CREATE INDEX IF NOT EXISTS idx_conversations_session_id ON conversations(session_id)`);
-    await run(`CREATE INDEX IF NOT EXISTS idx_conversations_created_at ON conversations(created_at)`);
+    await run("CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id)");
+    await run("CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at)");
+    await run("CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at)");
+    await run("CREATE INDEX IF NOT EXISTS idx_conversations_session_id ON conversations(session_id)");
+    await run("CREATE INDEX IF NOT EXISTS idx_conversations_created_at ON conversations(created_at)");
 }
 
 function close() {
