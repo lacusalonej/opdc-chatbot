@@ -1,5 +1,5 @@
 /**
- * PromptEngine สำหรับ Chatbot ก.พ.ร.
+ * PromptEngine สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง (MOF/OPS)
  *
  * โมดูลหลักสำหรับการสร้าง prompt ที่มีโครงสระสำหรับ LLM
  * รวมทุกส่วน: system instructions, user input, intent, context, evidence, citations
@@ -211,7 +211,7 @@ ${formatInstruction}`;
  *
  * @example
  * const result = processPrompt({
- *   userMessage: 'ก.พ.ร. มีวิสัยทัศน์อะไร',
+ *   userMessage: 'สปก. มีวิสัยทัศน์อะไร',
  *   retrievedDocuments: [{content: 'วิสัยทัศน์...', title: 'วิสัยทัศน์', sourceUrl: '...'}]
  * });
  */

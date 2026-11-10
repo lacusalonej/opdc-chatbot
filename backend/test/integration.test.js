@@ -91,7 +91,7 @@ async function json(path, opts = {}) {
         const r = await json('/v1/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'ก.พ.ร. คืออะไร' })
+            body: JSON.stringify({ message: 'สปก. คืออะไร' })
         });
         check('I5 POST /v1/chat คืน answer/intent/sources/session_id (+citations, insufficient_evidence)', () => {
             assert(r.status === 200, `status = ${r.status} body=${r.raw.slice(0, 200)}`);
@@ -254,12 +254,12 @@ async function json(path, opts = {}) {
         const res = await fetch(BASE + '/v1/chat', {
             method: 'OPTIONS',
             headers: {
-                Origin: 'https://opdc.go.th',
+                Origin: 'https://km.mof.go.th',
                 'Access-Control-Request-Method': 'POST',
                 'Access-Control-Request-Headers': 'Content-Type'
             }
         });
-        check('I17 CORS preflight จาก origin ที่อนุญาต (opdc.go.th) -> ไม่ถูกบล็อก', () => {
+        check('I17 CORS preflight จาก origin ที่อนุญาต (km.mof.go.th) -> ไม่ถูกบล็อก', () => {
             assert(res.status < 400, `status = ${res.status}`);
             const acao = res.headers.get('access-control-allow-origin');
             return `acao=${acao}`;
@@ -296,7 +296,7 @@ async function json(path, opts = {}) {
         const r = await json('/v1/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'เว็บไซต์ของกพรอยู่ที่ไหน' })
+            body: JSON.stringify({ message: 'เว็บไซต์ของสปกอยู่ที่ไหน' })
         });
         check('I20 answer ไม่อ้าง URL นอกเหนือจาก citations', () => {
             const urls = (r.body.answer || '').match(/https?:\/\/[^\s"<>)]+/g) || [];
@@ -326,7 +326,7 @@ async function json(path, opts = {}) {
         const r = await json('/v1/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'บริการของกพรมีอะไรบ้าง' })
+            body: JSON.stringify({ message: 'บริการของสปกมีอะไรบ้าง' })
         });
         const allowed = new Set(['answer', 'intent', 'sources', 'session_id', 'citations', 'insufficient_evidence']);
         const extra = Object.keys(r.body).filter(k => !allowed.has(k));

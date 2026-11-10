@@ -22,8 +22,8 @@ const fullMetadataDoc = {
     documentId: 'doc_full',
     content: 'เนื้อหาเต็ม',
     title: 'เอกสารเต็ม',
-    sourceUrl: 'https://www.opdc.go.th/test',
-    publisher: 'OPDC',
+    sourceUrl: 'https://km.mof.go.th/test',
+    publisher: 'MOF/OPS',
     publishedDate: '2024-01-01',
     effectiveDate: '2024-01-01',
     updatedAt: '2024-12-31',
@@ -38,7 +38,7 @@ const partialMetadataDoc = {
     documentId: 'doc_partial',
     content: 'เนื้อหาบางส่วน',
     title: 'เอกสารบางส่วน',
-    sourceUrl: 'https://www.opdc.go.th/partial',
+    sourceUrl: 'https://km.mof.go.th/partial',
     // ไม่มี publisher, dates, status, page, section
     retrievalScore: 0.85
 };
@@ -48,7 +48,7 @@ const outdatedDoc = {
     documentId: 'doc_outdated',
     content: 'ข้อมูลเดิม',
     title: 'เอกสารล้าสมัย',
-    sourceUrl: 'https://www.opdc.go.th/old',
+    sourceUrl: 'https://km.mof.go.th/old',
     documentStatus: 'superseded',
     publishedDate: '2020-01-01'
 };
@@ -75,7 +75,7 @@ function runTests() {
 
         assert.ok(result.context, 'ควรมี context');
         assert.ok(result.context.includes('เอกสารเต็ม'), 'ควรมีหัวข้อเอกสาร');
-        assert.ok(result.context.includes('https://www.opdc.go.th/test'), 'ควรมี URL');
+        assert.ok(result.context.includes('https://km.mof.go.th/test'), 'ควรมี URL');
         assert.ok(result.context.includes('หน้า 5'), 'ควรมีเลขหน้า');
         assert.ok(result.context.includes('บทที่ 1'), 'ควรมี section');
         assert.strictEqual(result.hasEvidence, true, 'ควรมี evidence');
@@ -93,12 +93,12 @@ function runTests() {
 
         assert.ok(result.context, 'ควรมี context แม้ metadata บางส่วนขาด');
         assert.ok(result.context.includes('เอกสารบางส่วน'), 'ควรมีหัวข้อ');
-        assert.ok(result.context.includes('https://www.opdc.go.th/partial'), 'ควรมี URL');
+        assert.ok(result.context.includes('https://km.mof.go.th/partial'), 'ควรมี URL');
 
         // ตรวจสอบ citations
         assert.strictEqual(result.citations.length, 1);
         assert.strictEqual(result.citations[0].title, 'เอกสารบางส่วน');
-        assert.strictEqual(result.citations[0].url, 'https://www.opdc.go.th/partial');
+        assert.strictEqual(result.citations[0].url, 'https://km.mof.go.th/partial');
         assert.strictEqual(result.citations[0].page, null, 'page ควรเป็น null เพราะไม่มี');
         assert.strictEqual(result.citations[0].section, null, 'section ควรเป็น null เพราะไม่มี');
 
@@ -199,7 +199,7 @@ function runTests() {
         const citation = buildCitation(fullMetadataDoc);
 
         assert.strictEqual(citation.title, 'เอกสารเต็ม');
-        assert.strictEqual(citation.url, 'https://www.opdc.go.th/test');
+        assert.strictEqual(citation.url, 'https://km.mof.go.th/test');
         assert.strictEqual(citation.page, 5);
         assert.strictEqual(citation.section, 'บทที่ 1');
 
@@ -237,7 +237,7 @@ function runTests() {
         const history = [
             { role: 'user', content: 'สวัสดี' },
             { role: 'assistant', content: 'สวัสดีครับ' },
-            { role: 'user', content: 'ก.พ.ร. คืออะไร' }
+            { role: 'user', content: 'สปก. คืออะไร' }
         ];
 
         const result = buildConversationHistory(history);

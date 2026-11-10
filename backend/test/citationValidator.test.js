@@ -17,7 +17,7 @@ const {
 } = require('../citationValidator');
 
 const mockDocs = [
-    { documentId: 'doc_1', title: 'เอกสารทดสอบ 1', sourceUrl: 'https://www.opdc.go.th/test1' },
+    { documentId: 'doc_1', title: 'เอกสารทดสอบ 1', sourceUrl: 'https://km.mof.go.th/test1' },
     { documentId: 'doc_2', title: 'เอกสารทดสอบ 2', sourceUrl: 'https://www.example.com/test2' },
     { title: 'เอกสารที่มีชื่อซ้ำ' }
 ];
@@ -31,7 +31,7 @@ function runTests() {
     // ทดสอบ 1: citations ที่ถูกต้อง
     try {
         const citations = [
-            { title: 'เอกสารทดสอบ 1', url: 'https://www.opdc.go.th/test1', page: 1 }
+            { title: 'เอกสารทดสอบ 1', url: 'https://km.mof.go.th/test1', page: 1 }
         ];
         const result = validateCitations(citations, mockDocs);
 
@@ -47,7 +47,7 @@ function runTests() {
     // ทดสอบ 2: citations ที่ title ไม่มีอยู่ใน retrieved docs
     try {
         const citations = [
-            { title: 'เอกสารที่ไม่มีอยู่', url: 'https://www.opdc.go.th/fake' }
+            { title: 'เอกสารที่ไม่มีอยู่', url: 'https://km.mof.go.th/fake' }
         ];
         const result = validateCitations(citations, mockDocs);
 
@@ -76,16 +76,16 @@ function runTests() {
         failed++;
     }
 
-    // ทดสอบ 4: URL ไม่ใช่แหล่งข้อมูล OPDC
+    // ทดสอบ 4: URL ไม่ใช่แหล่งข้อมูล สปก.
     try {
-        const valid = isValidUrl('https://www.opdc.go.th/test');
-        assert.strictEqual(valid, true, 'URL ของ OPDC ควรเป็น valid');
+        const valid = isValidUrl('https://km.mof.go.th/test');
+        assert.strictEqual(valid, true, 'URL ของ สปก. ควรเป็น valid');
 
-        const isOpdc = isOpdcSource('https://www.opdc.go.th/test');
-        assert.strictEqual(isOpdc, true, 'ควรระบุเป็นแหล่ง OPDC');
+        const isOpdc = isOpdcSource('https://km.mof.go.th/test');
+        assert.strictEqual(isOpdc, true, 'ควรระบุเป็นแหล่ง สปก.');
 
         const isNotOpdc = isOpdcSource('https://www.google.com');
-        assert.strictEqual(isNotOpdc, false, 'ไม่ควรระบุ Google เป็นแหล่ง OPDC');
+        assert.strictEqual(isNotOpdc, false, 'ไม่ควรระบุ Google เป็นแหล่ง สปก.');
         console.log(`  ✅ URL validation ทำงานได้`);
         passed++;
     } catch (err) {
@@ -110,7 +110,7 @@ function runTests() {
 
     // ทดสอบ 6: ไม่มี retrieved docs ให้ตรวจสอบ
     try {
-        const citations = [{ title: 'Test', url: 'https://www.opdc.go.th/test' }];
+        const citations = [{ title: 'Test', url: 'https://km.mof.go.th/test' }];
         const result = validateCitations(citations, []);
         // เมื่อไม่มี docs ให้เปรียบเทียบ การข้ามการตรวจสอบ title คือ acceptable
         assert.ok(result.coverage >= 0, 'ควรมีค่า coverage');
@@ -147,7 +147,7 @@ function runTests() {
 
     // ทดสอบ 8: page ที่เป็น string
     try {
-        const citation = { title: 'Test', url: 'https://www.opdc.go.th/test', page: '5' };
+        const citation = { title: 'Test', url: 'https://km.mof.go.th/test', page: '5' };
         const result = validateSingleCitation(citation, createDocumentMap(mockDocs));
         assert.ok(result.valid, 'page เป็น string ควรยัง valid');
         console.log(`  ✅ Page เป็น string -> ยัง valid`);

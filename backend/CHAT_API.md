@@ -1,4 +1,4 @@
-# คู่มือ Chat API — ระบบแชทบอท ก.พ.ร. (OPDC)
+# คู่มือ Chat API — ระบบแชทบอท สปก. (MOF/OPS)
 
 เอกสารนี้อธิบาย API Endpoint หลักของระบบแชทบอท (rule-based, ไม่ใช้ LLM) สำหรับนักพัฒนาที่ต้องการเชื่อมต่อหรือสร้าง frontend หน้าแชท
 
@@ -43,7 +43,7 @@ POST /v1/chat
 Content-Type: application/json
 
 {
-  "message": "ก.พ.ร. คืออะไร",
+  "message": "สปก. คืออะไร",
   "session_id": "optional-session-id"
 }
 ```
@@ -57,16 +57,16 @@ Content-Type: application/json
 
 ```json
 {
-  "answer": "สำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร. / OPDC) เป็นหน่วยงาน...",
+  "answer": "สำนักงานปลัดกระทรวงการคลัง (สปก. / OPS) เป็นหน่วยงานหลักในการบริหารจัดการด้านการคลังของประเทศ...",
   "intent": "ORGANIZATION_INFORMATION",
   "sources": ["org_name", "org_contact"],
   "session_id": "optional-session-id",
   "citations": [
     {
       "id": "org_name",
-      "title": "ข้อมูลองค์กร ก.พ.ร.",
-      "sourceUrl": "https://www.opdc.go.th",
-      "publisher": "สำนักงานคณะกรรมการพัฒนาระบบราชการ",
+      "title": "ข้อมูลองค์กร สปก.",
+      "sourceUrl": "https://km.mof.go.th/",
+      "publisher": "สำนักงานปลัดกระทรวงการคลัง",
       "documentStatus": "published"
     }
   ],
@@ -112,7 +112,7 @@ Content-Type: application/json
 ```bash
 curl -X POST http://localhost:8001/v1/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"ก.พ.ร. มีวิสัยทัศน์อะไรบ้าง","session_id":"user-123"}'
+  -d '{"message":"สปก. มีวิสัยทัศน์อะไรบ้าง","session_id":"user-123"}'
 ```
 
 ---
@@ -140,7 +140,7 @@ GET /v1/intents
     {
       "id": "ORGANIZATION_INFORMATION",
       "name_th": "ข้อมูลองค์กร",
-      "description_th": "เกี่ยวกับ ก.พ.ร., โครงสร้าง, วิสัยทัศน์, ภารกิจ"
+      "description_th": "เกี่ยวกับ สปก., โครงสร้าง, วิสัยทัศน์, ภารกิจ"
     },
     ...
   ]
@@ -152,7 +152,7 @@ GET /v1/intents
 | Intent | ชื่อภาษาไทย | คำอธิบาย |
 |--------|-------------|----------|
 | `GENERAL_GREETING` | การทักทาย | ทักทายและสอบถามสถานะ |
-| `ORGANIZATION_INFORMATION` | ข้อมูลองค์กร | เกี่ยวกับ ก.พ.ร., โครงสร้าง, วิสัยทัศน์, ภารกิจ |
+| `ORGANIZATION_INFORMATION` | ข้อมูลองค์กร | เกี่ยวกับ สปก., โครงสร้าง, วิสัยทัศน์, ภารกิจ |
 | `MISSION_AND_RESPONSIBILITIES` | ภารกิจและหน้าที่ | ภารกิจ, หน้าที่รับผิดชอบ, ยุทธศาสตร์ |
 | `PUBLIC_SERVICES` | บริการสาธารณะ | ขั้นตอนการให้บริการ |
 | `GOVERNMENT_SERVICE_IMPROVEMENT` | ปรับปรุงการบริการราชการ | นวัตกรรม, ดิจิทัล, การปรับปรุง |
@@ -163,7 +163,7 @@ GET /v1/intents
 | `CONTACT_AND_SUPPORT` | ช่องทางการติดต่อ | ที่อยู่, เบอร์, อีเมล, Facebook |
 | `DOCUMENT_SEARCH` | ค้นหาเอกสาร | ค้นหาเอกสาร PDF รายงาน |
 | `FOLLOW_UP_QUESTION` | คำถามต่อ | ตอบต่อคำถามในประวัติ |
-| `OUT_OF_SCOPE` | นอกขอบเขต | คำถามไม่เกี่ยวข้องกับ ก.พ.ร. |
+| `OUT_OF_SCOPE` | นอกขอบเขต | คำถามไม่เกี่ยวข้องกับ สปก. |
 | `INSUFFICIENT_INFORMATION` | ข้อมูลไม่เพียงพอ | ไม่มีข้อมูลเพียงพอตอบ |
 
 ---
@@ -274,7 +274,7 @@ GET /health
 ```bash
 curl -X POST http://localhost:8001/v1/chat \
   -H "Content-Type: application/json" \
-  -d '{"message":"ก.พ.ร. มีหน้าที่อะไรบ้าง","session_id":"user-abc123"}'
+  -d '{"message":"สปก. มีหน้าที่อะไรบ้าง","session_id":"user-abc123"}'
 ```
 
 ### ดูรายการ intent
@@ -305,7 +305,7 @@ curl http://localhost:8001/health
 
 ## หมายเหตุสำคัญ
 
-1. **ไม่มี LLM** — ระบบนี้เป็นแบบ rule-based (คีย์เวิร์ด) ไม่ได้ใช้โมเดล AI หรือ LLM ในการตอบ คำตอบขึ้นอยู่กับฐานความรู้ใน `knowledge/opdc-knowledge.json`
+1. **ไม่มี LLM** — ระบบนี้เป็นแบบ rule-based (คีย์เวิร์ด) ไม่ได้ใช้โมเดล AI หรือ LLM ในการตอบ คำตอบขึ้นอยู่กับฐานความรู้ใน `knowledge/mof-knowledge.json`
 2. **เซสชันอยู่ใน RAM** — ประวัติการสนทนาจะสูญหายเมื่อเซิร์ฟเวอร์หยุดทำงาน หรือเรียก `DELETE /v1/session/:id`
 3. **ภาษาไทย** — รองรับภาษาไทยเต็มรูปแบบ ตรวจจับภาษาอัตโนมัติ (ไทย/อังกฤษ)
 4. **ข้อความยาวสูงสุด** — `message` ต้องไม่เกิน 4,096 ตัวอักษร

@@ -17,7 +17,7 @@ const intentTests = [
     },
     {
         name: 'ORGANIZATION_INFORMATION',
-        message: 'ก.พ.ร. คืออะไร',
+        message: 'สปก. คืออะไร',
         expected: 'ORGANIZATION_INFORMATION'
     },
     {
@@ -27,7 +27,7 @@ const intentTests = [
     },
     {
         name: 'MISSION_AND_RESPONSIBILITIES',
-        message: 'ภารกิจของ ก.พ.ร. มีอะไร',
+        message: 'ภารกิจของ สปก. มีอะไร',
         expected: 'MISSION_AND_RESPONSIBILITIES'
     },
     {
@@ -62,7 +62,7 @@ const intentTests = [
     },
     {
         name: 'CONTACT_AND_SUPPORT',
-        message: 'ติดต่อ ก.พ.ร. ได้ที่ไหน',
+        message: 'ติดต่อ สปก. ได้ที่ไหน',
         expected: 'CONTACT_AND_SUPPORT'
     },
     {
@@ -98,7 +98,7 @@ function runTests() {
         try {
             // เติมประวัติการสนทนาสำหรับ FOLLOW_UP_QUESTION
             const history = test.expected === 'FOLLOW_UP_QUESTION'
-                ? [{ role: 'user', content: 'ก.พ.ร. มีหน้าที่อะไร' }, { role: 'assistant', content: 'มีหลายหน้าที่' }]
+                ? [{ role: 'user', content: 'สปก. มีหน้าที่อะไร' }, { role: 'assistant', content: 'มีหลายหน้าที่' }]
                 : [];
 
             const result = classifyIntent(test.message, history, 'th');
@@ -114,7 +114,7 @@ function runTests() {
 
     // ทดสอบภาษาอังกฤษ
     try {
-        const result = classifyIntent('What is OPDC?', [], 'en');
+        const result = classifyIntent('What is MOF?', [], 'en');
         assert.strictEqual(result, 'ORGANIZATION_INFORMATION');
         console.log(`  ✅ English classification: "What is OPDC?" -> ${result}`);
         passed++;

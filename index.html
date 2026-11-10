@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OPDC Chatbot — ระบบแชทบอท ก.พ.ร.</title>
+  <title>MOF Chatbot — ระบบแชทบอท สปก.</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Sarabun', 'Noto Sans Thai', sans-serif; background: #f5f7fa; color: #1f2937; line-height: 1.6; }
@@ -32,14 +32,14 @@
 <body>
   <div class="container">
     <header>
-      <h1>🤖 OPDC Chatbot</h1>
-      <p>ระบบแชทบอทสำหรับสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.)</p>
+      <h1>🤖 MOF Chatbot</h1>
+      <p>ระบบแชทบอทสำหรับสำนักงานปลัดกระทรวงการคลัง (สปก.)</p>
       <span class="badge">Rule-based · ไม่พึ่ง LLM · สอดคล้อง PDPA</span>
     </header>
 
     <div class="section">
       <h2>เกี่ยวกับระบบ</h2>
-      <p>OPDC Chatbot คือระบบแชทบอทแบบใช้กฎ (rule-based) ที่พัฒนาขึ้นเพื่อตอบคำถามจากประชาชนเกี่ยวกับภารกิจและบริการของสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร.) โดยไม่ต้องพึ่งพาโมเดล AI หรือ LLM ภายนอก ทำให้มั่นใจในเรื่องความปลอดภัยของข้อมูลและสอดคล้องกับพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)</p>
+      <p>MOF Chatbot คือระบบแชทบอทแบบใช้กฎ (rule-based) ที่พัฒนาขึ้นเพื่อตอบคำถามจากประชาชนเกี่ยวกับภารกิจและบริการของสำนักงานปลัดกระทรวงการคลัง (สปก.) โดยไม่ต้องพึ่งพาโมเดล AI หรือ LLM ภายนอก ทำให้มั่นใจในเรื่องความปลอดภัยของข้อมูลและสอดคล้องกับพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)</p>
     </div>
 
     <div class="section">
@@ -106,24 +106,24 @@
     </div>
 
     <footer>
-      <p>พัฒนาสำหรับสำนักงานคณะกรรมการพัฒนาระบบราชการ (ก.พ.ร. / OPDC) ประเทศไทย</p>
-      <p>&copy; 2026 OPDC Chatbot. อยู่ภใต้สัญญา MIT License</p>
+      <p>พัฒนาสำหรับสำนักงานปลัดกระทรวงการคลัง (สปก. / MOF) ประเทศไทย</p>
+      <p>&copy; 2026 MOF Chatbot. อยู่ภใต้สัญญา MIT License</p>
     </footer>
   </div>
 
-  <!-- OPDC Chat Widget — ช่องแชทลอยด้านขวาของจอ -->
+  <!-- MOF Chat Widget — ช่องแชทลอยด้านขวาของจอ -->
   <script src="frontend/chat-widget.js"></script>
   <script>
-    OPDCChatbot.init({
+    MOFChatbot.init({
       endpoint: 'https://mileage-computed-indexed-distribute.trycloudflare.com',
       position: 'bottom-right',
-      title: 'OPDC Chatbot',
-      subtitle: 'ถามคำถามเกี่ยวกับ ก.พ.ร.',
+      title: 'MOF Chatbot',
+      subtitle: 'ถามคำถามเกี่ยวกับ สปก.',
       welcomeMessage: 'สวัสดีครับ ยินดีให้บริการครับ มีอะไรให้ช่วยไหมครับ',
       quickReplies: [
-        'ก.พ.ร. คืออะไร',
+        'สปก. คืออะไร',
         'วิธีการติดต่อเจ้าหน้าที่',
-        'ข้อมูลทั่วไปเกี่ยวกับ ก.พ.ร.',
+        'ข้อมูลทั่วไปเกี่ยวกับ สปก.',
         'ค้นหาเอกสารและข่าวสาร'
       ]
     });

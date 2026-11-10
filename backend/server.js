@@ -1,5 +1,5 @@
 /**
- * Express Backend สำหรับ Chatbot ก.พ.ร.
+ * Express Backend สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง
  * - POST /v1/chat — ส่งคำถามและได้คำตอบ
  * - GET /v1/intents — แสดง intents ที่ recognize ได้
  * - GET /v1/sources — แสดงแหล่งข้อมูล
@@ -56,8 +56,9 @@ if (process.env.REDIS_URL) {
 // Middleware
 app.use(cors({
     origin: [
-        'https://www.opdc.go.th',
-        'https://opdc.go.th',
+        'https://km.mof.go.th',
+        'https://www.mof.go.th',
+        'https://mof.go.th',
         'http://localhost:8000',
         'http://localhost:8001',
         'http://localhost:5500',
@@ -84,6 +85,17 @@ app.use(session({
     },
 }));
 
+// Root route -> คืนข้อมูลบริการเป็น JSON (ต้องวางก่อน static middleware)
+app.get('/', (req, res) => {
+    res.json({
+        name: 'MOF Chatbot Backend',
+        version: '1.0.0',
+        service: 'chatbot-api',
+        status: 'ok',
+        endpoints: ['/v1/chat', '/v1/intents', '/v1/sources', '/health']
+    });
+});
+
 // ปิดเส้นทางภายในก่อน static middleware เพื่อไม่ให้ static จับก่อน
 app.get('/admin', (_, res) => {
     res.status(403).json({ error: 'Forbidden: admin access required' });
@@ -91,17 +103,6 @@ app.get('/admin', (_, res) => {
 
 // เสิร์ฟ static files (หน้าแชทและหน้าแอดมิน) จากโฟลเดอร์ parent
 app.use(express.static(path.join(__dirname, '..')));
-
-// Root route -> คืนข้อมูลบริการเป็น JSON
-app.get('/', (req, res) => {
-    res.json({
-        name: 'OPDC Chatbot Backend',
-        version: '1.0.0',
-        service: 'chatbot-api',
-        status: 'ok',
-        endpoints: ['/v1/chat', '/v1/intents', '/v1/sources', '/health']
-    });
-});
 
 // ตั้งค่า RAG engine
 const engine = new RAGEngine();
@@ -134,7 +135,7 @@ app.get('/v1/intents', (req, res) => {
     // ทำ backward compatibility: แมป intent IDs เดิม
     const intentMap = {
         'GENERAL_GREETING': { name_th: 'การทักทาย', desc_th: 'ทักทายและสอบถามสถานะ' },
-        'ORGANIZATION_INFORMATION': { name_th: 'ข้อมูลองค์กร', desc_th: 'เกี่ยวกับ ก.พ.ร., โครงสร้าง, วิสัยทัศน์, ภารกิจ' },
+        'ORGANIZATION_INFORMATION': { name_th: 'ข้อมูลองค์กร', desc_th: 'เกี่ยวกับ สปก., โครงสร้าง, วิสัยทัศน์, ภารกิจ' },
         'MISSION_AND_RESPONSIBILITIES': { name_th: 'ภารกิจและหน้าที่', desc_th: 'ภารกิจ หน้าที่รับผิดชอบ ยุทธศาสตร์' },
         'PUBLIC_SERVICES': { name_th: 'บริการสาธารณะ', desc_th: 'ขั้นตอนการให้บริการ' },
         'GOVERNMENT_SERVICE_IMPROVEMENT': { name_th: 'ปรับปรุงการบริการราชการ', desc_th: 'นวัตกรรม ดิจิทัล การปรับปรุง' },
@@ -145,7 +146,7 @@ app.get('/v1/intents', (req, res) => {
         'CONTACT_AND_SUPPORT': { name_th: 'ช่องทางการติดต่อ', desc_th: 'ที่อยู่ เบอร์ อีเมล Facebook' },
         'DOCUMENT_SEARCH': { name_th: 'ค้นหาเอกสาร', desc_th: 'ค้นหาเอกสาร PDF รายงาน' },
         'FOLLOW_UP_QUESTION': { name_th: 'คำถามต่อ', desc_th: 'ตอบต่อคำถามในประวัติ' },
-        'OUT_OF_SCOPE': { name_th: 'นอกขอบเขต', desc_th: 'คำถามไม่เกี่ยวข้องกับ ก.พ.ร.' },
+        'OUT_OF_SCOPE': { name_th: 'นอกขอบเขต', desc_th: 'คำถามไม่เกี่ยวข้องกับ สปก.' },
         'INSUFFICIENT_INFORMATION': { name_th: 'ข้อมูลไม่เพียงพอ', desc_th: 'ไม่มีข้อมูลเพียงพอตอบ' }
     };
 
@@ -256,7 +257,7 @@ initDb().then(() => {
     app.listen(PORT, () => {
         console.log(`
 ||
-||        OPDC Chatbot Backend (with Admin Dashboard)                 ||
+||        MOF Chatbot Backend (with Admin Dashboard)                 ||
 ||
 ||  Server: http://localhost:${PORT}             ||
 ||  API:    http://localhost:${PORT}/v1/chat     ||

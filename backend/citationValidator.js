@@ -1,5 +1,5 @@
 /**
- * CitationValidator สำหรับ Chatbot ก.พ.ร.
+ * CitationValidator สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง (MOF/OPS)
  *
  * ตรวจสอบว่า citations ในคำตอบมาจากเอกสารที่ให้มาจริงๆ
  * ทำหน้าที่เป็น secondary validation — ไม่ใช่หลักฐานว่าข้อมูลเป็นความจริง
@@ -75,14 +75,14 @@ function isValidUrl(url) {
 }
 
 /**
- * ตรวจสอบว่า URL เป็นของ OPDC ที่เชื่อถือได้หรือไม่
+ * ตรวจสอบว่า URL เป็นของ สำนักงานปลัดกระทรวงการคลัง ที่เชื่อถือได้หรือไม่
  *
  * @param {string} url
  * @returns {boolean}
  */
 function isOpdcSource(url) {
   if (!isNonEmptyString(url)) return false;
-  return url.includes('opdc.go.th') || url.includes('opdc.go.th');
+  return url.includes('mof.go.th');
 }
 
 /**
@@ -113,7 +113,7 @@ function validateSingleCitation(citation, documentMap) {
     } else if (!isValidUrl(citation.url)) {
       issues.push(`Citation URL "${citation.url}" is not a valid URL`);
     } else if (!isOpdcSource(citation.url)) {
-      issues.push(`Citation URL "${citation.url}" is not from an OPDC source`);
+      issues.push(`Citation URL "${citation.url}" is not from a สำนักงานปลัดกระทรวงการคลัง source`);
     }
   }
 

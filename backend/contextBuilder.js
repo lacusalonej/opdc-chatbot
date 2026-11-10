@@ -1,5 +1,5 @@
 /**
- * ContextBuilder สำหรับ Chatbot ก.พ.ร.
+ * ContextBuilder สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง (MOF/OPS)
  *
  * แปลงผลลัพธ์การค้นหา (retrieval results) เป็นบริบทหลักฐาน (evidence context)
  * ที่มีโครงสระ พร้อม metadata ครบถ้วน

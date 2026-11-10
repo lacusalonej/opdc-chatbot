@@ -1,5 +1,5 @@
 /**
- * OPDC Chatbot Widget — Vanilla JS embed widget
+ * MOF Chatbot Widget — Vanilla JS embed widget
  * ใส่แท็กนี้ในหน้าเว็บที่ต้องการให้แสดงแชทบอท:
  *   <script src="https://your-domain.com/chat-widget.js"></script>
  *   <script>OPDCChatbot.init({ endpoint: 'http://localhost:8001' });</script>
@@ -12,13 +12,13 @@
     endpoint: 'http://localhost:8001',
     position: 'bottom-right', // bottom-right | bottom-left
     primaryColor: '#0f62fe',
-    title: 'OPDC Chatbot',
-    subtitle: 'ถามคำถามเกี่ยวกับ ก.พ.ร.',
+    title: 'MOF Chatbot',
+    subtitle: 'ถามคำถามเกี่ยวกับ สปก.',
     welcomeMessage: 'สวัสดีครับ ยินดีให้บริการครับ มีอะไรให้ช่วยไหมครับ',
     quickReplies: [
-      'ก.พ.ร. คืออะไร',
+      'สปก. คืออะไร',
       'วิธีการติดต่อเจ้าหน้าที่',
-      'ข้อมูลทั่วไปเกี่ยวกับ ก.พ.ร.',
+      'ข้อมูลทั่วไปเกี่ยวกับ สปก.',
       'ค้นหาเอกสารและข่าวสาร'
     ]
   };
@@ -38,7 +38,7 @@
 
   function createWidget() {
     var wrapper = document.createElement('div');
-    wrapper.id = 'opdc-chatbot-wrapper';
+    wrapper.id = 'mof-chatbot-wrapper';
     wrapper.style.position = 'fixed';
     wrapper.style.bottom = '24px';
     wrapper.style.right = config.position === 'bottom-left' ? '24px' : '24px';
@@ -51,7 +51,7 @@
 
     // Button to open chat
     var btn = document.createElement('button');
-    btn.id = 'opdc-chatbot-toggle';
+    btn.id = 'mof-chatbot-toggle';
     btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
     btn.style.position = 'relative';
     btn.style.width = '56px';
@@ -68,7 +68,7 @@
 
     // Chat panel
     var panel = document.createElement('div');
-    panel.id = 'opdc-chatbot-panel';
+    panel.id = 'mof-chatbot-panel';
     panel.style.position = 'absolute';
     panel.style.bottom = '76px';
     panel.style.right = '0';
@@ -120,7 +120,7 @@
 
     // Messages area
     var messages = document.createElement('div');
-    messages.id = 'opdc-chatbot-messages';
+    messages.id = 'mof-chatbot-messages';
     messages.style.flex = '1';
     messages.style.overflowY = 'auto';
     messages.style.padding = '16px';
@@ -238,7 +238,7 @@
   function showTyping() {
     if (!ui) return;
     var typing = document.createElement('div');
-    typing.id = 'opdc-typing';
+    typing.id = 'mof-typing';
     typing.style.padding = '10px 14px';
     typing.style.background = '#f3f4f6';
     typing.style.color = '#6b7280';

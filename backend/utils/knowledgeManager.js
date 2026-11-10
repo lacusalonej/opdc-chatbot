@@ -8,7 +8,7 @@ const UPLOADED_FILE = path.join(KNOWLEDGE_DIR, 'uploaded-knowledge.json');
 
 /**
  * จัดการ chunks ที่ผู้ใช้งานอัพโหลดเข้ามาเสริมฐานความรู้
- * เก็บแยกจาก knowledge/opdc-knowledge.json เดิมเพื่อกันลบโดยไม่ตั้งใจ
+ * เก็บแยกจาก knowledge/mof-knowledge.json เดิมเพื่อกันลบโดยไม่ตั้งใจ
  */
 class KnowledgeManager {
     constructor() {

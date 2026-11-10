@@ -1,7 +1,7 @@
 {
-  "name": "opdc-chatbot-backend",
+  "name": "mof-chatbot-backend",
   "version": "1.0.0",
-  "description": "Backend API for OPDC Chatbot",
+  "description": "Backend API for MOF Chatbot",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {

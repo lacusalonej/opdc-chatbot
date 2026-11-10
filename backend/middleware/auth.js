@@ -4,7 +4,7 @@
  * Middleware ยืนยันตัวตนสำหรับ endpoint แอดมินอัพโหลดไฟล์
  * ตรวจสอบ header X-Admin-Key หรือ query param admin_key
  */
-const ADMIN_KEY = process.env.ADMIN_UPLOAD_KEY || 'opdc-admin-2026';
+const ADMIN_KEY = process.env.ADMIN_UPLOAD_KEY || 'mof-admin-2026';
 
 function requireAdminKey(req, res, next) {
     const key = req.headers['x-admin-key'] || req.query.admin_key;

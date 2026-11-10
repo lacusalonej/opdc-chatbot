@@ -1,5 +1,5 @@
 /**
- * IntentClassifier สำหรับ Chatbot ก.พ.ร.
+ * IntentClassifier สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง (MOF/OPS)
  *
  * ใช้ approach แบบ deterministic/keyword-based เพื่อ classification
  * ไม่ใช้ LLM เสริม (ยังไม่มี integration)
@@ -55,7 +55,8 @@ const INTENT_KEYWORDS = {
 
   ORGANIZATION_INFORMATION: [
     'เป็นอะไร', 'คืออะไร', 'โครงสร้าง', 'ประวัติ', 'วิสัยทัศน์', 'vision',
-    'องค์กร', 'มีอะไรบ้าง', 'กพร', 'ก.พ.ร.', 'opdc', 'คณะกรรมการ',
+    'องค์กร', 'มีอะไรบ้าง', 'สปก', 'สำนักงานปลัดกระทรวงการคลัง', 'มข.', 'mof',
+    'คณะกรรมการ',
     'คณะผู้บริหาร', 'executive', 'board', 'committee', 'มูลนิธิ', 'สมาชิก'
   ],
 
@@ -145,7 +146,7 @@ function scoreIntent(query, keywords) {
     if (query.includes(kwLower)) {
       // คำหนาที่ที่ยากหรือเจาะจงได้คะแนนสูงกว่า
       const tokenLength = kwLower.replace(/[.\s]/g, '').length;
-      score += tokenLength > 0 ? Math.min(10, tokenLength) : 5;
+      score += tokenLength > 0 ? Math.max(4, Math.min(10, tokenLength)) : 5;
     }
   }
   return score;
@@ -178,7 +179,7 @@ function isFollowUpQuestion(query, history) {
  *
  * @example
  * classifyIntent('สวัสดีครับ');  // 'GENERAL_GREETING'
- * classifyIntent('ก.พ.ร. มีวิสัยทัศน์อะไร');  // 'ORGANIZATION_INFORMATION'
+ * classifyIntent('สปก. มีวิสัยทัศน์อะไร');  // 'ORGANIZATION_INFORMATION'
  */
 function classifyIntent(userMessage, conversationHistory, detectedLanguage = 'th') {
   // ตรวจสอบอินพุตพื้นฐาน

@@ -16,7 +16,7 @@ const {
 } = require('../answerValidator');
 
 const mockDocs = [
-    { documentId: 'doc_1', title: 'เอกสารทดสอบ', sourceUrl: 'https://www.opdc.go.th/test' }
+    { documentId: 'doc_1', title: 'เอกสารทดสอบ', sourceUrl: 'https://km.mof.go.th/test' }
 ];
 
 function runTests() {
@@ -85,8 +85,8 @@ function runTests() {
         const result = hasUnverifiedSourceReferences(answer, citations);
         assert.strictEqual(result, true, 'ควรตรวจจับ URL ที่ไม่มีอยู่ใน citations');
 
-        const answer2 = 'ข้อมูลเพิ่มเติมที่ https://www.opdc.go.th/test';
-        const citations2 = [{ url: 'https://www.opdc.go.th/test' }];
+        const answer2 = 'ข้อมูลเพิ่มเติมที่ https://km.mof.go.th/test';
+        const citations2 = [{ url: 'https://km.mof.go.th/test' }];
         const result2 = hasUnverifiedSourceReferences(answer2, citations2);
         assert.strictEqual(result2, false, 'ไม่ควรตรวจจับ URL ที่อยู่ใน citations');
         console.log(`  ✅ ตรวจจับ URL ที่ไม่ได้มาจาก citations ทำงานได้`);

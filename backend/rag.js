@@ -1,6 +1,8 @@
 /**
- * RAG Engine สำหรับ Chatbot ก.พ.ร. (OPDC)
+ * RAG Engine สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง (MOF/OPS)
  * รองรับภาษาไทย: ตัดคำพื้นฐาน + จับ substring + จับ intent
+ *
+ * ข้อมูลดึงมาจาก https://km.mof.go.th/ (สำนักงานปลัดกระทรวงการคลัง)
  *
  * แก้ไข: เพิ่ม metadata (title, sourceUrl, publisher, documentStatus) ให้ chunks
  * เพื่อรองรับ citation validation และตอบสนองตามข้อกำหนดของ Prompt Engine
@@ -10,7 +12,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const KNOWLEDGE_FILE = path.join(__dirname, '..', 'knowledge', 'opdc-knowledge.json');
+const KNOWLEDGE_FILE = path.join(__dirname, '..', 'knowledge', 'mof-knowledge.json');
 
 class RAGEngine {
     constructor(knowledgeFile) {
@@ -27,74 +29,74 @@ class RAGEngine {
     _createChunks() {
         const chunks = [];
         const org = this.data.organization;
-        const baseUrl = 'https://www.opdc.go.th/';
+        const baseUrl = 'https://km.mof.go.th/';
 
         // เพิ่ม metadata ให้ chunks เพื่อรองรับ citations
         chunks.push({
             id: 'knowledge_center',
             category: 'search',
-            keywords: ['ศูนย์ความรู้', 'ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ระเบียบ', 'กฎหมาย', 'คำวินิจฉัย', 'รายงาน'],
-            title: 'ศูนย์ความรู้ ก.พ.ร.',
+            keywords: ['ศูนย์ความรู้', 'ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ระเบียบ', 'กฎหมาย', 'คำวินิจฉัย', 'รายงาน', 'คลังความรู้', 'ตู้สาระ'],
+            title: 'ศูนย์ความรู้ สำนักงานปลัดกระทรวงการคลัง',
             sourceUrl: baseUrl,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            publisher: 'สำนักงานปลัดกระทรวงการคลัง',
             documentStatus: 'published',
-            content: `ศูนย์ความรู้ ก.พ.ร. ให้บริการ:\n- กฎหมายและคำวินิจฉัย\n- เอกสารเผยแพร่และรายงานผลการปฏิบัติราชการ\n- ข้อมูล B-READY, PMQA, OGP\nสามารถสืบค้นได้ที่เว็บไซต์หลัก https://www.opdc.go.th/`
+            content: `ศูนย์ความรู้ สำนักงานปลัดกระทรวงการคลัง ให้บริการ:\n- คลังความรู้ (Knowledge Bank)\n- ตู้สาระ (Information Cabinet)\n- ข้อมูล KM (KM Information)\n- เอกสารและคู่มือปฏิบัติงาน\n- กฎหมายและระเบียบ ข้อบังคับ\n- คำวินิจฉัยและรายงานผล\n- ข่าวสารและอินโฟกราฟิก\n- วิดีโอสารคดีความรู้\nสามารถสืบค้นได้ที่เว็บไซต์หลัก https://km.mof.go.th/`
         });
 
         chunks.push({
             id: 'org_name',
             category: 'general',
-            keywords: ['กพร', 'ก.พ.ร.', 'opdc', 'คืออะไร', 'ชื่อเต็ม', 'สังกัด', 'บทบาท', 'ประวัติ'],
-            title: 'ข้อมูลองค์กร ก.พ.ร.',
+            keywords: ['สปก', 'สำนักงานปลัดกระทรวงการคลัง', 'mof', 'กระทรวงการคลัง', 'คืออะไร', 'ชื่อเต็ม', 'สังกัด', 'บทบาท', 'ประวัติ', 'องค์กร'],
+            title: 'ข้อมูลองค์กร สำนักงานปลัดกระทรวงการคลัง',
             sourceUrl: baseUrl,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            publisher: 'สำนักงานปลัดกระทรวงการคลัง',
             documentStatus: 'published',
-            content: `${org.name_th} (${org.name_en}) ชื่อย่อคือ ${org.abbr_th} หรือ ${org.abbr_en} มีหน้าที่พัฒนาและยกระดับระบบราชการไทยตามหลักธรรมาภิบาล ให้คำปรึกษาและข้อเสนอแนะนโยบายแก่คณะรัฐมนตรีและหน่วยงานภาครัฐ`
+            content: `${org.name_th} (${org.name_en}) ชื่อย่อคือ ${org.abbr_th} หรือ ${org.abbr_en} ดำเนินการโดย ${org.operator} มีหน้าที่บริหารจัดการด้านการคลัง การงบประมาณ และระบบบริหารจัดการภาครัฐ เพื่อสนับสนุนการพัฒนาประเทศอย่างยั่งยืน`
         });
 
         chunks.push({
             id: 'org_contact',
             category: 'contact',
-            keywords: ['ติดต่อ', 'เบอร์', 'โทร', 'โทรสาร', 'fax', 'email', 'อีเมล', 'ที่อยู่', 'facebook', 'youtube', 'สถานที่', 'แผนที่', 'อยู่ที่ไหน'],
-            title: 'ข้อมูลการติดต่อ ก.พ.ร.',
-            sourceUrl: `${baseUrl}/contact`,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            keywords: ['ติดต่อ', 'เบอร์', 'โทร', 'โทรสาร', 'fax', 'email', 'อีเมล', 'ที่อยู่', 'สายด่วน', '1689', 'สถานที่', 'แผนที่', 'อยู่ที่ไหน', 'พระรามที่ 6', 'พญาไท'],
+            title: 'ข้อมูลการติดต่อ สำนักงานปลัดกระทรวงการคลัง',
+            sourceUrl: `${baseUrl}contact-us/`,
+            publisher: 'สำนักงานปลัดกระทรวงการคลัง',
             documentStatus: 'published',
-            content: `ช่องทางการติดต่อ ก.พ.ร. (OPDC):\n- ที่อยู่: ${org.address}\n- เบอร์โทรศัพท์: ${org.phone}\n- โทรสาร (Fax): ${org.fax}\n- อีเมล: ${org.email}\n- Facebook: OPDCThailand\n- YouTube: OPDCThailand`
+            content: `ช่องทางการติดต่อ สำนักงานปลัดกระทรวงการคลัง:\n- ที่อยู่: ${org.address}\n- เบอร์โทรศัพท์: ${org.phone}\n- โทรสาร (Fax): ${org.fax}\n- อีเมล: ${org.email}\n- สายด่วน: ${org.hotline}`
         });
 
         chunks.push({
             id: 'vision',
             category: 'general',
             keywords: ['วิสัยทัศน์', 'vision', 'เป้าหมาย'],
-            title: 'วิสัยทัศน์ ก.พ.ร.',
-            sourceUrl: `${baseUrl}/about/vision/`,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            title: 'วิสัยทัศน์ สำนักงานปลัดกระทรวงการคลัง',
+            sourceUrl: `${baseUrl}about/vision/`,
+            publisher: 'สำนักงานปลัดกระทรวงการคลัง',
             documentStatus: 'published',
-            content: `วิสัยทัศน์ ก.พ.ร.: "${this.data.vision.text_th}"`
+            content: `วิสัยทัศน์ สำนักงานปลัดกระทรวงการคลัง: "${this.data.vision.text_th}"`
         });
 
         chunks.push({
             id: 'mission',
             category: 'general',
             keywords: ['ภารกิจ', 'mission', 'หน้าที่'],
-            title: 'ภารกิจ ก.พ.ร.',
-            sourceUrl: `${baseUrl}/about/vision/`,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            title: 'ภารกิจ สำนักงานปลัดกระทรวงการคลัง',
+            sourceUrl: `${baseUrl}about/vision/`,
+            publisher: 'สำนักงานปลัดกระทรวงการคลัง',
             documentStatus: 'published',
-            content: `ภารกิจ ก.พ.ร.: ${this.data.mission.text_th}`
+            content: `ภารกิจ สำนักงานปลัดกระทรวงการคลัง: ${this.data.mission.text_th}`
         });
 
         for (const issue of this.data.strategic_issues) {
             chunks.push({
                 id: `strategic_${issue.id}`,
                 category: 'general',
-                keywords: ['ยุทธศาสตร์', 'เป้าหมาย', 'กลยุทธ์', issue.title_th],
-                title: `ประเด็นยุทธศาสตร์ที่ ${issue.id}`,
-                sourceUrl: `${baseUrl}/about/opdc-action-plan/`,
-                publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+                keywords: ['ยุทธศาสตร์', 'เป้าหมาย', 'กลยุทธ์', 'หมวดหมู่ความรู้', issue.title_th],
+                title: `ประเด็นความรู้ที่ ${issue.id}: ${issue.title_th}`,
+                sourceUrl: `${baseUrl}document-type/knowledge/`,
+                publisher: 'สำนักงานปลัดกระทรวงการคลัง',
                 documentStatus: 'published',
-                content: `ประเด็นยุทธศาสตร์ที่ ${issue.id}: ${issue.title_th} - ${issue.desc_th}`
+                content: `ประเด็นความรู้ที่ ${issue.id}: ${issue.title_th} - ${issue.desc_th}`
             });
         }
 
@@ -102,10 +104,10 @@ class RAGEngine {
             chunks.push({
                 id: `committee_${comm.name_th.slice(0, 10)}`,
                 category: 'general',
-                keywords: ['คณะกรรมการ', 'กรรมการ', comm.name_th],
+                keywords: ['คณะทำงาน', 'คณะกรรมการ', 'กรรมการ', 'KM Team', comm.name_th],
                 title: comm.name_th,
-                sourceUrl: `${baseUrl}/about/board/`,
-                publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+                sourceUrl: `${baseUrl}contact-us/`,
+                publisher: 'สำนักงานปลัดกระทรวงการคลัง',
                 documentStatus: 'published',
                 content: `${comm.name_th} (${comm.name_en}): ${comm.role_th}`
             });
@@ -115,12 +117,25 @@ class RAGEngine {
             chunks.push({
                 id: `service_${service.name_th.slice(0, 10)}`,
                 category: 'service',
-                keywords: ['บริการ', 'ขั้นตอน', 'ขอ', 'รางวัล', service.name_th],
+                keywords: ['บริการ', 'ขั้นตอน', 'ขอ', 'คลังความรู้', 'ตู้สาระ', service.name_th],
                 title: service.name_th,
                 sourceUrl: baseUrl,
-                publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+                publisher: 'สำนักงานปลัดกระทรวงการคลัง',
                 documentStatus: 'published',
                 content: `${service.name_th}: ${service.desc_th}`
+            });
+        }
+
+        for (const event of this.data.events) {
+            chunks.push({
+                id: `event_${event.name_th.slice(0, 8)}`,
+                category: 'document',
+                keywords: ['เอกสาร', 'คู่มือ', 'รายงาน', event.name_th],
+                title: event.name_th,
+                sourceUrl: `${baseUrl}document-type/knowledge/`,
+                publisher: 'สำนักงานปลัดกระทรวงการคลัง',
+                documentStatus: 'published',
+                content: `เอกสาร: ${event.name_th} (วันที่ ${event.date_th}) - ${event.desc_th}`
             });
         }
 
@@ -130,12 +145,12 @@ class RAGEngine {
             keywords: ['สวัสดี', 'หวัดดี', 'hello', 'hi', 'ทักทาย', 'สบายดีไหม'],
             title: 'การทักทาย',
             sourceUrl: baseUrl,
-            publisher: 'สำนักงานคณะกรรมการพัฒนาระบบราชการ',
+            publisher: 'สำนักงานปลัดกระทรวงการคลัง',
             documentStatus: 'published',
-            content: `สวัสดีครับ! ผมคือ Chatbot ผู้ช่วยของสำนักงาน ก.พ.ร. (OPDC) ยินดีให้บริการข้อมูลทั่วไป การติดต่อ การบริการ และการสืบค้นเอกสารครับ ถามมาได้เลยครับ`
+            content: `สวัสดีครับ! ผมคือ Chatbot ผู้ช่วยของสำนักงานปลัดกระทรวงการคลัง (MOF/OPS) ยินดีให้บริการข้อมูลทั่วไป การติดต่อ การบริการ และการสืบค้นเอกสารความรู้ครับ ถามมาได้เลยครับ`
         });
 
-        // แปลง text → content สำหร้บ compatibility กับโค้ดเดิม
+        // แปลง text → content สำหรับ compatibility กับโค้ดเดิม
         for (const chunk of chunks) {
             if (chunk.text && !chunk.content) {
                 chunk.content = chunk.text;
@@ -163,11 +178,11 @@ class RAGEngine {
 
         // 2. ตรวจสอบจาก keyword dictionaries
         const keywords = {
-            contact: ['ติดต่อ', 'เบอร์', 'โทร', 'email', 'อีเมล', 'ที่อยู่', 'facebook', 'youtube', 'fax', 'โทรสาร', 'ที่ไหน'],
+            contact: ['ติดต่อ', 'เบอร์', 'โทร', 'email', 'อีเมล', 'ที่อยู่', 'สายด่วน', '1689', 'fax', 'โทรสาร', 'ที่ไหน', 'พระรามที่ 6', 'พญาไท'],
             chat: ['สวัสดี', 'หวัดดี', 'hello', 'hi', 'ขอบคุณ', 'บาย', 'ลาก่อน'],
-            service: ['บริการ', 'ขั้นตอน', 'วิธี', 'ขอ', 'สมัคร', 'รางวัล', 'psea', 'ประเมิน'],
-            search: ['ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ไฟล์', 'รายงาน', 'newsletter', 'b-ready'],
-            general: ['คืออะไร', 'กพร', 'ก.พ.ร.', 'opdc', 'วิสัยทัศน์', 'ภารกิจ', 'ยุทธศาสตร์', 'คณะกรรมการ', 'โครงสร้าง', 'ประวัติ']
+            service: ['บริการ', 'ขั้นตอน', 'วิธี', 'ขอ', 'สมัคร', 'คลังความรู้', 'ตู้สาระ'],
+            search: ['ค้นหา', 'เอกสาร', 'pdf', 'ดาวน์โหลด', 'ไฟล์', 'รายงาน', 'คู่มือ', 'ระเบียบ'],
+            general: ['คืออะไร', 'สปก', 'สำนักงานปลัดกระทรวงการคลัง', 'mof', 'กระทรวงการคลัง', 'วิสัยทัศน์', 'ภารกิจ', 'ยุทธศาสตร์', 'คณะทำงาน', 'โครงสร้าง', 'ประวัติ']
         };
 
         for (const [intent, kws] of Object.entries(keywords)) {
@@ -198,8 +213,6 @@ class RAGEngine {
                     if (q.includes(kwLower) || kwLower.includes(q)) {
                         score += 5;
                     }
-                    // เช็กแยกตาม token ด้วย (เช่น "ก.พ.ร." ถูกแบ่งเป็น "ก", "พ", "ร" → ไม่เข้า)
-                    // แต่ "กพร" หรือ "opdc" จะเข้า
                     const kwTokens = kwLower.split(/[\s.]+/).filter(t => t.length >= 2);
                     for (const kwt of kwTokens) {
                         if (q.includes(kwt)) {
@@ -249,14 +262,14 @@ class RAGEngine {
         const { matches } = this.answer(query);
 
         if (!matches || matches.length === 0) {
-            return 'ขออภัยครับ ยังไม่พบข้อมูลที่ตรงกับคำถามนี้โดยตรง\n\nท่านสามารถติดต่อสอบถามเจ้าหน้าที่ ก.พ.ร. ได้โดยตรงที่:\n📞 โทร: 02 356 9999\n📧 อีเมล: contact@opdc.go.th\n🌐 เว็บไซต์: https://www.opdc.go.th/';
+            return 'ขออภัยครับ ยังไม่พบข้อมูลที่ตรงกับคำถามนี้โดยตรง\n\nท่านสามารถติดต่อสอบถามเจ้าหน้าที่สำนักงานปลัดกระทรวงการคลัง ได้โดยตรงที่:\n📞 โทร: 02-126-5800, 02-273-9408\n📧 อีเมล: saraban@mof.go.th\n📞 สายด่วน: 1689\n🌐 เว็บไซต์: https://km.mof.go.th/';
         }
 
         const texts = matches.map(m => m.text);
         let answer = texts.join('\n\n');
 
-        if (intent === 'contact' && !answer.includes('02 356 9999')) {
-            answer += '\n\n📞 โทร: 02 356 9999 | Fax: 02 356 9910';
+        if (intent === 'contact' && !answer.includes('02-126-5800')) {
+            answer += '\n\n📞 โทร: 02-126-5800, 02-273-9408 | Fax: 02-273-9408 | สายด่วน: 1689';
         }
 
         return answer;

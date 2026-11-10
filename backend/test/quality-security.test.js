@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const BASE = process.env.BASE_URL || 'http://localhost:8100';
 // หาไฟล์ความรู้จากตำแหน่งของไฟล์นี้ จึงย้ายโฟลเดอร์ไปที่ไหนก็ยังทำงานได้
-const KB_PATH = path.resolve(__dirname, '..', '..', 'knowledge', 'opdc-knowledge.json');
+const KB_PATH = path.resolve(__dirname, '..', '..', 'knowledge', 'mof-knowledge.json');
 const KB = JSON.parse(fs.readFileSync(KB_PATH, 'utf8'));
 const KB_TEXT = JSON.stringify(KB);
 
@@ -59,7 +59,7 @@ async function raw(path, opts) {
     const kbUrls = new Set((KB_TEXT.match(/https?:\/\/[^"\\\s]+/g) || []));
 
     await (async () => {
-        const r = await chat('ก.พ.ร. คืออะไร');
+        const r = await chat('สปก. คืออะไร');
         check('S4', 'C1 citations มีครบ field title/url', () => {
             assert(Array.isArray(r.body.citations), 'citations ไม่ใช่ array');
             assert(r.body.citations.length > 0, 'citations ว่าง');
@@ -72,7 +72,7 @@ async function raw(path, opts) {
     })();
 
     await (async () => {
-        const r = await chat('ก.พ.ร. คืออะไร');
+        const r = await chat('สปก. คืออะไร');
         check('S4', 'C2 ทุก citation URL ต้องมีอยู่จริงในฐานความรู้ (KB)', () => {
             const bad = (r.body.citations || []).filter(c => !kbUrls.has(c.url));
             assert(bad.length === 0, `citation URL ไม่อยู่ใน KB: ${bad.map(c=>c.url).join(', ')}`);
@@ -81,7 +81,7 @@ async function raw(path, opts) {
     })();
 
     await (async () => {
-        const r = await chat('บริการของกพรมีอะไรบ้าง');
+        const r = await chat('บริการของสปกมีอะไรบ้าง');
         check('S4', 'C3 citation ต้องสอดคล้องกับ sources ที่คืน (ไม่อ้างเอกสารนอกชุด)', () => {
             assert(Array.isArray(r.body.sources) && r.body.sources.length > 0, 'sources ว่าง');
             assert((r.body.citations || []).length > 0, 'citations ว่าง');
@@ -91,7 +91,7 @@ async function raw(path, opts) {
 
     await (async () => {
         // ทดสอบหลายคำถาม: URL ในคำตอบต้องอยู่ใน citations เสมอ
-        const qs = ['เว็บไซต์ของกพรอยู่ที่ไหน', 'ติดต่อกพรได้ทางไหน', 'มีบริการอะไรบ้าง'];
+        const qs = ['เว็บไซต์ของสปกอยู่ที่ไหน', 'ติดต่อสปกได้ทางไหน', 'มีบริการอะไรบ้าง'];
         const rogue = [];
         let n = 0;
         for (const q of qs) {
@@ -164,7 +164,7 @@ async function raw(path, opts) {
     })();
 
     await (async () => {
-        const res = await fetch(BASE + '/v1/chat', { method: 'OPTIONS', headers: { Origin: 'https://opdc.go.th', 'Access-Control-Request-Method': 'POST' } });
+        const res = await fetch(BASE + '/v1/chat', { method: 'OPTIONS', headers: { Origin: 'https://km.mof.go.th', 'Access-Control-Request-Method': 'POST' } });
         check('A4', 'A4 CORS อนุญาต origin ที่ถูกต้อง', () => {
             assert(res.headers.get('access-control-allow-origin') !== null, 'acao ขาดหาย');
             return `acao=${res.headers.get('access-control-allow-origin')}`;
@@ -264,7 +264,7 @@ async function raw(path, opts) {
 
     await (async () => {
         const t0 = Date.now();
-        const rs = await Promise.all(Array.from({ length: 25 }, (_, i) => chat('บริการของกพรมีอะไรบ้าง ' + i)));
+        const rs = await Promise.all(Array.from({ length: 25 }, (_, i) => chat('บริการของสปกมีอะไรบ้าง ' + i)));
         const dt = Date.now() - t0;
         const errs = rs.filter(r => r.status !== 200);
         check('D3', 'D3 รับพร้อมกัน 25 request -> ไม่มี error', () => {
@@ -347,15 +347,15 @@ async function raw(path, opts) {
     // =====================================================================
 
     const QUALITY = [
-        { cat: 'Q1 ความถูกต้อง', q: 'ก.พ.ร. คืออะไร', expect: ['คณะกรรมการพัฒนาระบบราชการ', 'ระบบราชการ'] },
-        { cat: 'Q2 ความถูกต้อง', q: 'เบอร์โทรศัพท์ของ ก.พ.ร. คืออะไร', expect: ['356 9999', '02 356 9999'] },
-        { cat: 'Q2 ความถูกต้อง', q: 'ที่อยู่สำนักงาน ก.พ.ร.', expect: ['พิษณุโลก', 'ดุสิต', '10300'] },
-        { cat: 'Q1 ความถูกต้อง', q: 'อีเมลติดต่อของ ก.พ.ร.', expect: ['contact@opdc.go.th'] },
-        { cat: 'Q1 ความถูกต้อง', q: 'วิสัยทัศน์ของ ก.พ.ร. คืออะไร', expect: ['หลักธรรมาภิบาล', 'ธรรมาภิบาล'] },
-        { cat: 'Q3 ความครบถ้วน', q: 'บริการของ ก.พ.ร. มีอะไรบ้าง', expect: ['คำปรึกษา', 'PSEA', 'B-READY', 'ประเมินผล'] },
-        { cat: 'Q3 ความครบถ้วน', q: 'คณะกรรมการของ ก.พ.ร. มีกี่คณะ', expect: ['ค.ต.ป.', 'กพม.', 'อ.ก.พ.ร.'] },
-        { cat: 'Q3 ความครบถ้วน', q: 'ยุทธศาสตร์ของ ก.พ.ร. มีอะไรบ้าง', expect: ['นวัตกรรม', 'ธรรมาภิบาล', 'ดิจิทัล'] },
-        { cat: 'Q4 ความเกี่ยวข้อง', q: 'ศูนย์ความรู้ของ ก.พ.ร. มีอะไรบ้าง', expect: ['กฎหมาย', 'คำวินิจฉัย', 'เอกสาร'] }
+        { cat: 'Q1 ความถูกต้อง', q: 'สปก. คืออะไร', expect: ['สำนักงานปลัดกระทรวงการคลัง', 'กระทรวงการคลัง'] },
+        { cat: 'Q2 ความถูกต้อง', q: 'เบอร์โทรศัพท์ของ สปก. คืออะไร', expect: ['02-126-5800', '02-273-9408'] },
+        { cat: 'Q2 ความถูกต้อง', q: 'ที่อยู่สำนักงาน สปก.', expect: ['พระรามที่ 6', 'พญาไท', 'กรุงเทพฯ 10400'] },
+        { cat: 'Q1 ความถูกต้อง', q: 'อีเมลติดต่อของ สปก.', expect: ['saraban@mof.go.th'] },
+        { cat: 'Q1 ความถูกต้อง', q: 'วิสัยทัศน์ของ สปก. คืออะไร', expect: ['บริหารจัดการด้านการคลัง', 'โปร่งใส', 'ตรวจสอบได้'] },
+        { cat: 'Q3 ความครบถ้วน', q: 'บริการของ สปก. มีอะไรบ้าง', expect: ['คลังความรู้', 'ตู้สาระ', 'ข้อมูล KM', 'e-Office'] },
+        { cat: 'Q3 ความครบถ้วน', q: 'คณะทำงานของ สปก. มีอะไรบ้าง', expect: ['KM Team', 'System Development Group'] },
+        { cat: 'Q3 ความครบถ้วน', q: 'ยุทธศาสตร์ของ สปก. มีอะไรบ้าง', expect: ['นโยบายและยุทธศาสตร์', 'เทคโนโลยีสารสนเทศ', 'การพัฒนาระบบบริหาร'] },
+        { cat: 'Q4 ความเกี่ยวข้อง', q: 'ศูนย์ความรู้ของ สปก. มีอะไรบ้าง', expect: ['คลังความรู้', 'ตู้สาระ', 'กฎหมาย/ระเบียบ'] }
     ];
 
     const qualityResults = [];
@@ -372,7 +372,7 @@ async function raw(path, opts) {
 
     // Q5 ความชัดเจน
     await (async () => {
-        const r = await chat('ก.พ.ร. คืออะไร');
+        const r = await chat('สปก. คืออะไร');
         check('S6', 'Q5 ความชัดเจน | คำตอบไม่ว่างและไม่ยาวผิดปกติ', () => {
             const a = r.body.answer || '';
             assert(a.length > 20, `คำตอบสั้นเกินไป (${a.length} ตัวอักษร)`);
@@ -404,7 +404,7 @@ async function raw(path, opts) {
 
     // Q8 ภาษา
     await (async () => {
-        const th = await chat('บริการของกพรมีอะไรบ้าง');
+        const th = await chat('บริการของสปกมีอะไรบ้าง');
         const en = await chat('What services does OPDC provide?');
         check('S6', 'Q8 ภาษา | ตอบภาษาไทยเมื่อถามไทย และตอบภาษาอังกฤษเมื่อถามอังกฤษ', () => {
             const thOk = /[฀-๿]/.test(th.body.answer || '');
@@ -428,7 +428,7 @@ async function raw(path, opts) {
     // Q10 ประสิทธิภาพ
     await (async () => {
         const t0 = Date.now();
-        for (let i = 0; i < 10; i++) await chat('บริการของกพรมีอะไรบ้าง');
+        for (let i = 0; i < 10; i++) await chat('บริการของสปกมีอะไรบ้าง');
         const avg = (Date.now() - t0) / 10;
         check('S6', 'Q10 ประสิทธิภาพ | เวลาตอบเฉลี่ย 10 ครั้ง', () => {
             assert(avg < 1000, `เฉลี่ย ${avg.toFixed(0)}ms ช้าเกินไป`);

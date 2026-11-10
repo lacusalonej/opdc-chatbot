@@ -1,5 +1,5 @@
 /**
- * FallbackResponses สำหรับ Chatbot ก.พ.ร.
+ * FallbackResponses สำหรับ Chatbot สำนักงานปลัดกระทรวงการคลัง (MOF/OPS)
  * ให้ข้อความตอบแทนบนภาษาไทยและอังกฤษ
  * สำหรับสถานการณ์: ไม่มีหลักฐาน, หลักฐานไม่เพียงพอ, ข้อมูลขัดแย้ง,
  * เอกสารล้าสมัย, การค้นหาล้มเหลว, ผู้ให้บริการล้มเหลว, ผลลัพธ์ไม่ถูกต้อง
@@ -20,10 +20,10 @@
 const thaiResponses = {
   NO_EVIDENCE: `ขออภัยครับ ไม่พบข้อมูลที่เกี่ยวข้องกับคำถามนี้ในระบบของเรา
 
-คุณสามารถติดต่อสอบถามเจ้าหน้าที่ ก.พ.ร. ได้โดยตรงที่:
-📞 โทร: 02 356 9999
-📧 อีเมล: contact@opdc.go.th
-🌐 เว็บไซต์: https://www.opdc.go.th/`,
+คุณสามารถติดต่อสอบถามเจ้าหน้าที่สำนักงานปลัดกระทรวงการคลัง ได้โดยตรงที่:
+📞 โทร: 02-126-5800, 02-273-9408
+📧 อีเมล: saraban@mof.go.th
+🌐 เว็บไซต์: https://km.mof.go.th/`,
 
   INSUFFICIENT_EVIDENCE: `ขออภัยครับ ข้อมูลที่มีอยู่ไม่เพียงพอที่จะตอบคำถามนี้อย่างชัดเจน
 
@@ -46,18 +46,18 @@ const thaiResponses = {
 
   RETRIEVAL_ERROR: `ขออภัยครับ เกิดข้อผิดพลาดขณะค้นหาข้อมูลในขณะนี้ กรุณาลองใหม่อีกครั้งในภายหลัง
 
-หากปัญหาpersist ให้ติดต่อสอบถามเจ้าหน้าที่ ก.พ.ร. ได้ที่:
-📞 โทร: 02 356 9999
-📧 อีเมล: contact@opdc.go.th`,
+หากปัญหาpersist ให้ติดต่อสอบถามเจ้าหน้าที่สำนักงานปลัดกระทรวงการคลัง ได้ที่:
+📞 โทร: 02-126-5800, 02-273-9408
+📧 อีเมล: saraban@mof.go.th`,
 
   PROVIDER_ERROR: `ขออภัยครับ เกิดข้อผิดพลาดในขณะประมวลผลคำขอของคุณ กรุณาลองใหม่อีกครั้งในภายหลัง`,
 
   INVALID_OUTPUT: `ขออภัยครับ เกิดข้อผิดพลาดข้อมูลในการประมวลผลคำตอบ กรุณาลองใหม่อีกครั้ง`,
 
-  OUT_OF_SCOPE: `สวัสดีครับ! ผมคือ Chatbot ผู้ช่วยของ สำนักงาน ก.พ.ร. (OPDC)
+  OUT_OF_SCOPE: `สวัสดีครับ! ผมคือ Chatbot ผู้ช่วยของ สำนักงานปลัดกระทรวงการคลัง (สปก.)
 
 ฉันสามารถช่วยตอบคำถามเกี่ยวกับ:
-• ข้อมูลทั่วไปของ ก.พ.ร. และองค์กร
+• ข้อมูลทั่วไปของ สปก. และองค์กร
 • วิสัยทัศน์ ภารกิจ และยุทธศาสตร์
 • บริการและขั้นตอนต่างๆ
 • เอกสารและคู่มือ
@@ -65,7 +65,7 @@ const thaiResponses = {
 • ดิจิทัลการปกครอง
 • ช่องทางการติดต่อ
 
-คุณมีคำถามอะไรเกี่ยวกับ ก.พ.ร. ไหมครับ?`
+คุณมีคำถามอะไรเกี่ยวกับ สปก. ไหมครับ?`
 };
 
 /**
@@ -74,10 +74,10 @@ const thaiResponses = {
 const englishResponses = {
   NO_EVIDENCE: `I'm sorry, but I couldn't find any relevant information to answer your question in our system.
 
-You can contact the OPDC staff directly:
-📞 Phone: 02 356 9999
-📧 Email: contact@opdc.go.th
-🌐 Website: https://www.opdc.go.th/`,
+You can contact the MOF/OPS staff directly:
+📞 Phone: 02-126-5800, 02-273-9408
+📧 Email: saraban@mof.go.th
+🌐 Website: https://km.mof.go.th/`,
 
   INSUFFICIENT_EVIDENCE: `I'm sorry, but the available information is insufficient to answer your question clearly.
 
@@ -100,18 +100,18 @@ We recommend verifying the latest information from official sources:`,
 
   RETRIEVAL_ERROR: `I'm sorry, but we encountered an error while searching for information. Please try again later.
 
-If the problem persists, you can contact OPDC staff:
-📞 Phone: 02 356 9999
-📧 Email: contact@opdc.go.th`,
+If the problem persists, you can contact MOF/OPS staff:
+📞 Phone: 02-126-5800, 02-273-9408
+📧 Email: saraban@mof.go.th`,
 
   PROVIDER_ERROR: `I'm sorry, but we encountered an error while processing your request. Please try again later.`,
 
   INVALID_OUTPUT: `I'm sorry, but we encountered an error while generating the answer. Please try again later.`,
 
-  OUT_OF_SCOPE: `Hello! I'm the OPDC chatbot assistant.
+  OUT_OF_SCOPE: `Hello! I'm the MOF/OPS chatbot assistant.
 
 I can help you with questions about:
-• OPDC organization information and structure
+• MOF/OPS organization information and structure
 • Vision, mission, and strategic issues
 • Public services and procedures
 • Official manuals and documents
