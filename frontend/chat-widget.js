@@ -135,18 +135,18 @@
     var quickReplies = document.createElement('div');
     quickReplies.style.display = 'flex';
     quickReplies.style.flexWrap = 'wrap';
-    quickReplies.style.gap = '8px';
-    quickReplies.style.marginBottom = '8px';
+    quickReplies.style.gap = '6px';
+    quickReplies.style.marginBottom = '6px';
     config.quickReplies.forEach(function (text) {
       var chip = document.createElement('button');
       chip.textContent = text;
-      chip.style.flex = '1';
-      chip.style.minWidth = '80px';
-      chip.style.padding = '8px 12px';
+      chip.style.flex = 'auto';
+      chip.style.minWidth = '60px';
+      chip.style.padding = '6px 10px';
       chip.style.background = '#f3f4f6';
       chip.style.border = '1px solid #d1d5db';
-      chip.style.borderRadius = '20px';
-      chip.style.fontSize = '0.8rem';
+      chip.style.borderRadius = '16px';
+      chip.style.fontSize = '0.75rem';
       chip.style.cursor = 'pointer';
       chip.style.color = '#111827';
       chip.onclick = function () { sendMessage(text); };
