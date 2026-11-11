@@ -2,7 +2,7 @@
  * MOF Chatbot Widget — Vanilla JS embed widget
  * ใส่แท็กนี้ในหน้าเว็บที่ต้องการให้แสดงแชทบอท:
  *   <script src="https://your-domain.com/chat-widget.js"></script>
- *   <script>OPDCChatbot.init({ endpoint: 'http://localhost:8001' });</script>
+ *   <script>MOFChatbot.init({ endpoint: 'http://localhost:8001' });</script>
  */
 
 (function (window, document) {
@@ -278,11 +278,11 @@
       .catch(function (err) {
         removeTyping(typing);
         addMessage('ขออภัยครับ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่อีกครั้งภายหลัง', 'bot');
-        console.error('[OPDC Chatbot] Error:', err);
+        console.error('[MOF Chatbot] Error:', err);
       });
   }
 
-  window.OPDCChatbot = {
+  window.MOFChatbot = {
     init: function (userConfig) {
       mergeConfig(userConfig);
       if (!ui) ui = createWidget();

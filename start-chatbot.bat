@@ -1,5 +1,5 @@
 @echo off
-echo OPDC Chatbot Launcher
+echo MOF Chatbot Launcher
 echo.
 echo Checking files...
 if not exist "backend\server.js" (
